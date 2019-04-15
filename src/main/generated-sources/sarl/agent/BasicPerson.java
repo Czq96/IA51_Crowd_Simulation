@@ -33,6 +33,14 @@ import org.eclipse.xtext.xbase.lib.Pure;
 @SarlElementType(18)
 @SuppressWarnings("all")
 public class BasicPerson extends Agent {
+  private float posX;
+  
+  private float posY;
+  
+  private float speed;
+  
+  private float accelar;
+  
   private void $behaviorUnit$Initialize$0(final Initialize occurrence) {
     Logging _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER = this.$castSkill(Logging.class, (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING == null || this.$CAPACITY_USE$IO_SARL_CORE_LOGGING.get() == null) ? (this.$CAPACITY_USE$IO_SARL_CORE_LOGGING = this.$getSkill(Logging.class)) : this.$CAPACITY_USE$IO_SARL_CORE_LOGGING);
     _$CAPACITY_USE$IO_SARL_CORE_LOGGING$CALLER.info("The agent was started.");
@@ -138,6 +146,41 @@ public class BasicPerson extends Agent {
     assert occurrence != null;
     assert ___SARLlocal_runnableCollection != null;
     ___SARLlocal_runnableCollection.add(() -> $behaviorUnit$MemberJoined$6(occurrence));
+  }
+  
+  @Override
+  @Pure
+  @SyntheticMember
+  public boolean equals(final Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    BasicPerson other = (BasicPerson) obj;
+    if (Float.floatToIntBits(other.posX) != Float.floatToIntBits(this.posX))
+      return false;
+    if (Float.floatToIntBits(other.posY) != Float.floatToIntBits(this.posY))
+      return false;
+    if (Float.floatToIntBits(other.speed) != Float.floatToIntBits(this.speed))
+      return false;
+    if (Float.floatToIntBits(other.accelar) != Float.floatToIntBits(this.accelar))
+      return false;
+    return super.equals(obj);
+  }
+  
+  @Override
+  @Pure
+  @SyntheticMember
+  public int hashCode() {
+    int result = super.hashCode();
+    final int prime = 31;
+    result = prime * result + Float.floatToIntBits(this.posX);
+    result = prime * result + Float.floatToIntBits(this.posY);
+    result = prime * result + Float.floatToIntBits(this.speed);
+    result = prime * result + Float.floatToIntBits(this.accelar);
+    return result;
   }
   
   @SyntheticMember

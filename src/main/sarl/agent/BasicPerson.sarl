@@ -18,6 +18,13 @@ import io.sarl.core.MemberLeft
  * 
  */
 agent BasicPerson {
+	var posX : float;
+	var posY : float;
+	var speed : float;
+	var accelar : float;
+	//accelar is  the accelaration of speed.
+
+	
 	uses Logging
 
 	on Initialize {
