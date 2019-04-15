@@ -1,0 +1,38 @@
+package crowd.ui
+
+import framework.gui.AbstractFrameworkGUI
+import framework.math.Point2f
+import framework.math.Vector2f
+import framework.time.TimeManager
+import framework.util.Resources
+import java.awt.Graphics2D
+import java.awt.Shape
+import java.io.Serializable
+
+public class Gui extends AbstractFrameworkGUI{
+	
+	// create a BottomPanel for simulate control
+	new(worldWidth : float,worldHeight: float,timeManager:TimeManager){
+		super(
+			"Crowd Simulation",
+			worldWidth,
+			worldHeight,
+			Resources::getResource(typeof(Gui),"icon.png"),
+			timeManager
+		)
+		
+	}
+	
+	protected def isMouseCursorHidden : boolean {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+	def paintAgentBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f, frustum : Shape) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+	def paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+}

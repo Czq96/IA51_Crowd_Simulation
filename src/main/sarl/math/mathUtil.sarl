@@ -1,8 +1,0 @@
-package math
-import static 
-/* Reply the sign of the value */
-def sign( a: float) :int{
-	if(a<0.0) return -1
-	if(a>0.0) return 1
-	return 0
-}
