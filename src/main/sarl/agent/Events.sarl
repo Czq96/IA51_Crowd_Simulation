@@ -1,0 +1,13 @@
+/** 
+ * 
+ */
+package ^agent
+
+/** 
+ * @author c
+ * 
+ */
+event Perception {
+// receive perception
+
+}
