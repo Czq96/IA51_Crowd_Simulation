@@ -1,0 +1,5 @@
+target/*
+#忽略所有src/main/generated-sources/目录下的文件
+src/main/generated-sources/*
+#忽略sarlbin结尾的文件
+*.[sarlbin]
