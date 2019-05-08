@@ -1,10 +1,10 @@
 package crowd.ui
 
-import framework.gui.AbstractFrameworkGUI
-import framework.math.Point2f
-import framework.math.Vector2f
-import framework.time.TimeManager
-import framework.util.Resources
+import fr.utbm.info.ia51.framework.gui.AbstractFrameworkGUI
+import fr.utbm.info.ia51.framework.math.Point2f
+import fr.utbm.info.ia51.framework.math.Vector2f
+import fr.utbm.info.ia51.framework.time.TimeManager
+import fr.utbm.info.ia51.framework.util.Resources
 import java.awt.Graphics2D
 import java.awt.Shape
 import java.io.Serializable
