@@ -3,5 +3,5 @@ target/*
 src/main/generated-sources/*
 #忽略sarlbin结尾的文件
 *.[sarlbin]
-src/main/sarl/fr/*
+#src/main/sarl/fr/*
 src/test/*

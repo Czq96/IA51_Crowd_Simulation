@@ -16,6 +16,10 @@ agent SimulationLauncher {
 		var environment = new SquareMap(WORLD_SIZE_X, WORLD_SIZE_Y)
 		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)
 		gui.visible = true
+		//TODO： 
+		
+		
+		
 		}
 
 	on Initialize {
