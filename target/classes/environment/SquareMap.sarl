@@ -16,7 +16,6 @@ import fr.utbm.info.ia51.framework.math.Shape2f
 import fr.utbm.info.ia51.framework.math.Vector2f
 import fr.utbm.info.ia51.framework.time.StepTimeManager
 import fr.utbm.info.ia51.framework.time.TimeManager
-import fr.utbm.info.ia51.framework.util.CollectionUtil
 import fr.utbm.info.ia51.general.frustum.CircleFrustum
 import java.util.ArrayList
 import java.util.Collection

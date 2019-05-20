@@ -28,6 +28,7 @@ import crowdAgent.Visitor
 import crowd.ui.Gui
 import java.util.List
 import environment.SquareMap
+import io.sarl.core.Logging
 
 /** 
  * @author 
@@ -35,12 +36,15 @@ import environment.SquareMap
  */
 agent MotionBehaviorBoot extends FrameworkLauncher {
 
+	uses Logging;
+	
 	val WORLD_SIZE_X = 700f
 	val WORLD_SIZE_Y = 700f
 	val NUMBER_VISITOR = 2
 
 	override initializeSimulation(parameters : List<Object>) : boolean {
 
+		info("Crowd simulation was started.");
 		var type = BehaviorTypeSelector.open
 		if (type !== null) {
 			var environment = new SquareMap(WORLD_SIZE_X, WORLD_SIZE_Y)
