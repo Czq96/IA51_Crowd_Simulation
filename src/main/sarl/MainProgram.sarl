@@ -1,0 +1,28 @@
+import environment.*
+import crowd.ui.*
+import io.sarl.core.Logging
+import io.sarl.core.Initialize
+
+agent SimulationLauncher {
+
+	uses Logging
+	val WORLD_SIZE_X = 700f
+	val WORLD_SIZE_Y = 700f
+	val NUMBER_VISITOR = 2
+
+	def initializeSimulation() : void {
+
+		info("initialize simulation!")
+		var environment = new SquareMap(WORLD_SIZE_X, WORLD_SIZE_Y)
+		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)
+		gui.visible = true
+		}
+
+	on Initialize {
+		initializeSimulation()
+	}
+	
+	
+
+
+}

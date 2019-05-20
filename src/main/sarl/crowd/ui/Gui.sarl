@@ -17,22 +17,22 @@ public class Gui extends AbstractFrameworkGUI{
 			"Crowd Simulation",
 			worldWidth,
 			worldHeight,
-			Resources::getResource(typeof(Gui),"icon.png"),
+			Resources::getResource(typeof(Gui),"start.png"),
 			timeManager
-		)
-		
+		)	
 	}
 	
 	protected def isMouseCursorHidden : boolean {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		true
+		//throw new UnsupportedOperationException("TODO: isMouseCursorHidden")
 	}
 	
 	def paintAgentBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f, frustum : Shape) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		throw new UnsupportedOperationException("TODO: paintAgentBody")
 	}
 	
 	def paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		throw new UnsupportedOperationException("TODO: paintSituatedObject")
 	}
 	
 }
