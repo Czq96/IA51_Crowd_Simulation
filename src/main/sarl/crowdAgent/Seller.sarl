@@ -1,8 +1,9 @@
 /** 
  * 
  */
-package ^agent
+package crowdAgent
 
+import fr.utbm.info.ia51.framework.^agent.AbstractAnimat
 import io.sarl.core.AgentKilled
 import io.sarl.core.AgentSpawned
 import io.sarl.core.ContextJoined
@@ -17,19 +18,19 @@ import io.sarl.core.MemberLeft
  * @author c
  * 
  */
-behavior SellerBehavior {
+agent Seller extends AbstractAnimat {
 	uses Logging
 
 	on Initialize {
-		// Event trigger before the behavior begin to live or to be used.
+		// Event trigger before the agent begin to live or to be used.
 		// You should put all the initialization statements in this block of code.
-		info("The behavior was started.")
+		info("The agent was started.")
 	}
 
 	on Destroy {
-		// Event trigger when the behavior is destroyed from the system.
+		// Event trigger when the agent is destroyed from the system.
 		// You should put all the resource releasing statements in this block of code.
-		info("The behavior was stopped.")
+		info("The agent was stopped.")
 	}
 
 	on AgentSpawned {
@@ -42,12 +43,12 @@ behavior SellerBehavior {
 
 	on ContextJoined {
 		// Event trigger when an agent of the level joins a shared context.
-		// Sent to a behavior of the same level.
+		// Sent to a agent of the same level.
 	}
 
 	on ContextLeft {
 		// Event trigger when an agent of the level jleaves a shared context.
-		// Sent to a behavior of the same level.
+		// Sent to a agent of the same level.
 	}
 
 	on MemberJoined {
