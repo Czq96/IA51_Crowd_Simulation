@@ -24,9 +24,9 @@ agent SimulationLauncher extends FrameworkLauncher {
 
 		var type = DynamicType.KINEMATIC ;// 这里是DynamicType 类型， 是agent的行为类型
 		//TODO: 完成visitor 和 environment
-//		for (i : 1 .. NUMBER_VISITOR) {
-//			environment.createVisitor
-//		}
+		for (i : 1 .. NUMBER_VISITOR) {
+			environment.createVisitor
+		}
 		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)
 		
 		return initializeSimulation(environment, type, gui, parameters)[typeof(Visitor)]

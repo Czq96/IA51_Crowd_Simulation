@@ -30,7 +30,7 @@ import java.text.MessageFormat
  */
 class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
-	static val VISITOR_SIZE = 20f
+	static val VISITOR_SIZE = 20f //TODO: change to image
 
 	var spatialList : List<String> //TODO AgentBody
 	
