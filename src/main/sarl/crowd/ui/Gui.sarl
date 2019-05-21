@@ -1,38 +1,59 @@
 package crowd.ui
 
-import fr.utbm.info.ia51.framework.gui.AbstractFrameworkGUI
-import fr.utbm.info.ia51.framework.math.Point2f
-import fr.utbm.info.ia51.framework.math.Vector2f
-import fr.utbm.info.ia51.framework.time.TimeManager
-import fr.utbm.info.ia51.framework.util.Resources
+
 import java.awt.Graphics2D
 import java.awt.Shape
 import java.io.Serializable
 
-public class Gui extends AbstractFrameworkGUI{
+import environment.EnvironmentEvent
+import environment.EnvironmentListener
+import java.awt.Dimension
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.swing.JFrame
+
+
+class Gui extends JFrame implements EnvironmentListener{
+	
+	var isInit=new AtomicBoolean
+	
+	var waitingDuration : long
 	
 	// create a BottomPanel for simulate control
-	new(worldWidth : float,worldHeight: float,timeManager:TimeManager){
-		super(
-			"Crowd Simulation",
-			worldWidth,
-			worldHeight,
-			Resources::getResource(typeof(Gui),"icon.png"),
-			timeManager
-		)
+	new(worldWidth : int,worldHeight:int,waitingDuration:long){
+		
+		
+		this.waitingDuration = waitingDuration
+
+		this.preferredSize = new Dimension(worldWidth, worldHeight)
+		this.defaultCloseOperation=JFrame::EXIT_ON_CLOSE
+		
+		pack
 		
 	}
-	
-	protected def isMouseCursorHidden : boolean {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-	
-	def paintAgentBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f, frustum : Shape) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
-	
-	def paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f) {
-		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+
+	def environmentChanged(^event : EnvironmentEvent) : void {
+		if (!isInit.get) {
+			this.isInit.set(true)
+
+			/* this.gridPanel.preferredSize = new Dimension(
+			 * CELL_WIDTH * ^event.width,
+			 * CELL_HEIGHT * ^event.height)
+			 */
+			revalidate
+			pack
+			this.visible = true
+			// this.gridPanel.requestFocus
+		}
+		if (this.waitingDuration > 0) {
+			try {
+				Thread::sleep(this.waitingDuration)
+			} catch (e : InterruptedException) {
+				throw new RuntimeException(e)
+			}
+		}
+		// this.gridPanel.setObjects(^event.time, ^event.objects)
+		
+		
 	}
 	
 }
