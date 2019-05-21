@@ -3,30 +3,34 @@ import crowd.ui.*
 import io.sarl.core.Logging
 import io.sarl.core.Initialize
 
-agent SimulationLauncher {
+import fr.utbm.info.ia51.framework.FrameworkLauncher
+// import fr.utbm.info.ia51.framework.gui.BehaviorTypeSelector
+import fr.utbm.info.ia51.framework.environment.DynamicType
+import ^agent.Visitor
+import environment.SquareMap
+import crowd.ui.Gui
+import java.util.List
+
+agent SimulationLauncher extends FrameworkLauncher {
 
 	uses Logging
 	val WORLD_SIZE_X = 700f
 	val WORLD_SIZE_Y = 700f
 	val NUMBER_VISITOR = 2
 
-	def initializeSimulation() : void {
+	override initializeSimulation(parameters : List<Object>) : boolean {
 
-		info("initialize simulation!")
 		var environment = new SquareMap(WORLD_SIZE_X, WORLD_SIZE_Y)
-		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)
-		gui.visible = true
-		//TODO： 
-		
-		
-		
-		}
 
-	on Initialize {
-		initializeSimulation()
-	}
-	
-	
+		var type = DynamicType.KINEMATIC ;// 这里是DynamicType 类型， 是agent的行为类型
+		//TODO: 完成visitor 和 environment
+//		for (i : 1 .. NUMBER_VISITOR) {
+//			environment.createVisitor
+//		}
+		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)
+		
+		return initializeSimulation(environment, type, gui, parameters)[typeof(Visitor)]
+		}
 
 
 }
