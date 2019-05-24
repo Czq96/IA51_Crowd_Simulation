@@ -24,6 +24,7 @@ agent Visitor extends BasicPerson{
 		// Event trigger before the agent begin to live or to be used.
 		// You should put all the initialization statements in this block of code.
 		info("The agent was started.")
+		
 	}
 
 	on Destroy {

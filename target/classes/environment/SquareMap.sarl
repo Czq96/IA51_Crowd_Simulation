@@ -1,7 +1,7 @@
 package environment
 
 import fr.utbm.info.ia51.framework.environment.AbstractEnvironment
-import fr.utbm.info.ia51.framework.environment.AgentBody
+import fr.utbm.info.ia51.framework.environment.AgentBody // 生成了小兔子
 import fr.utbm.info.ia51.framework.environment.DynamicType
 import fr.utbm.info.ia51.framework.environment.Influence
 import fr.utbm.info.ia51.framework.environment.MotionInfluence
@@ -23,6 +23,7 @@ import java.util.Collection
 import java.util.List
 import java.util.UUID
 import java.text.MessageFormat
+import java.util.ArrayList;
 
 /** 
  * Model of the world.
@@ -32,7 +33,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	static val VISITOR_SIZE = 20f //TODO: change to image
 
-	var spatialList : List<String> //TODO AgentBody
+	var agentBodyList = new ArrayList<AgentBody> // TODO AgentBody
 	
 	/** 
 	 * @param width is the width of the world.
@@ -42,9 +43,33 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		super(width, height, new StepTimeManager(500))
 		//this.spatialList = new List<>()
 	}
-	
-	protected def onAgentBodyCreated(body : AgentBody) {
-		throw new UnsupportedOperationException("TODO: onAgentBodyCreated ")
+
+	def createVisitor {
+		var id = UUID::randomUUID
+		var frustum = new CircleFrustum(id, 10 * VISITOR_SIZE)
+		var body = new AgentBody(
+			id,
+			new Circle2f(0f, 0f, VISITOR_SIZE), // body
+			5f, // max linear speed m/s
+			0.5f, // max linear acceleration (m/s)/s
+			MathUtil.PI / 4f, // max angular speed r/s
+			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+			frustum)
+		body.name = MessageFormat::format("Visitor #{0}", this.agentBodyNumber + 1)
+		addAgentBody(
+			body, 
+			randomPosition,
+			Math::random as float * MathUtil.TWO_PI)
+	}
+
+	protected def randomPosition : Point2f {
+		var x = Math::random as float * this.width - VISITOR_SIZE
+		var y = Math.random() as float * this.height - VISITOR_SIZE
+		return new Point2f(x, y)
+	}
+
+	 protected def onAgentBodyCreated(body : AgentBody) {
+		this.agentBodyList.add(body) // initialize visitor
 	}
 	
 	protected def onAgentBodyDestroyed(body : AgentBody) {
