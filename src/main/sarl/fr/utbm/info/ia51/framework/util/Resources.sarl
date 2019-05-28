@@ -48,23 +48,6 @@ final class Resources {
 	 */
 	public static val RESOURCE_PREFIX = "resources/" //$NON-NLS-1$
 
-	/**
-     * Replies the URL of a resource.
-     * <p>
-     * You may use Unix-like syntax to write the resource path, ie.
-     * you may use slashes to separate filenames.
-     * <p>
-     * The class loader replied by {@link ClassLoaderFinder} is used.
-     * If it is <code>null</code>, the class loader of
-     * the Resources class is used.
-     *
-     * @param path is the absolute path of the resource. 
-     * @return the url of the resource or <code>null</code> if the resource was
-     * not found in class paths.
-     */
-    static def getResource(path : String) : URL {
-    	return getResource(null as ClassLoader, path)
-    }
 
    	/**
      * Replies the URL of a resource.
@@ -349,7 +332,28 @@ final class Resources {
     	return getResource(classLoader, classname.package, name.toString)
     }
 
-    /** Translate the given resource name according to the current JVM standard.
+	/** 
+	 * Replies the URL of a resource.
+	 * <p>
+	 * You may use Unix-like syntax to write the resource path, ie.
+	 * you may use slashes to separate filenames.
+	 * <p>
+	 * The class loader replied by {@link ClassLoaderFinder} is used.
+	 * If it is <code>null</code>, the class loader of
+	 * the Resources class is used.
+	 * 
+	 * @param path is the absolute path of the resource. 
+	 * @return the url of the resource or <code>null</code> if the resource was
+	 * not found in class paths.
+	 */
+    static def getResource(path : String) : URL {
+    	
+		return getResource(null as ClassLoader, path)
+				// TODO: null as ClassLoader 
+	}
+	
+
+	/** Translate the given resource name according to the current JVM standard.
      * <p>
      * The <code>resourceName</code> argument should be a fully 
      * qualified class name. However, for compatibility with earlier 

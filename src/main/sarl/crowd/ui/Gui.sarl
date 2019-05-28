@@ -29,10 +29,12 @@ public class Gui extends AbstractFrameworkGUI {
 	static var ICON_HEIGHT : int
 
 	static val FAKE = {
-		var url = Resources.getResource(typeof(Gui), "visitor.png") // $NON-NLS-1$
-		assert url !== null
-		VISITOR_ICON = new ImageIcon(url)
-//		url = Resources::getResource(typeof(GUI), "carrot.png") // $NON-NLS-1$
+		//var url = Resources.getResource(typeof(Gui), "visitor.png") // $NON-NLS-1$
+		//assert url !== null
+		//VISITOR_ICON = new ImageIcon(url)
+
+		VISITOR_ICON = new ImageIcon("。/visitor.png")
+		//		url = Resources::getResource(typeof(GUI), "carrot.png") // $NON-NLS-1$
 //		assert url !== null
 //		CARROT_ICON = new ImageIcon(url)
 		ICON_WIDTH = VISITOR_ICON.iconWidth
@@ -110,8 +112,38 @@ public class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	def paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f) {
-		throw new UnsupportedOperationException("TODO: paintSituatedObject")
+	override paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
+		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f) {
+		var bounds = shape.bounds
+		g2d.color = Color.GREEN
+
+		var icon : Icon
+		if ("TARGET" == type) {
+			icon = VISITOR_ICON
+		}
+
+		if (this.showIcons.selected && icon !== null) {
+			paintIcon(g2d, icon, positionOnScreen, orientationOnScreen)
+		} else {
+			g2d.fill(shape)
+			if (orientationOnScreen !== null) {
+				g2d.color = g2d.background
+				var v = orientationOnScreen * Math.max(bounds.width, bounds.height) as float
+				g2d.draw(new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + v.x,
+					positionOnScreen.y + v.y))
+			}
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString(
+					"(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+					bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
 	}
-	
+
 }
