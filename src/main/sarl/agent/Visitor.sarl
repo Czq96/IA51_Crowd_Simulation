@@ -3,60 +3,80 @@
  */
 package ^agent
 
-import io.sarl.core.AgentKilled
-import io.sarl.core.AgentSpawned
-import io.sarl.core.ContextJoined
-import io.sarl.core.ContextLeft
-import io.sarl.core.Destroy
+import fr.utbm.info.ia51.framework.^agent.AbstractAnimat
+import fr.utbm.info.ia51.framework.environment.DynamicType
+import fr.utbm.info.ia51.framework.environment.Percept
+import fr.utbm.info.ia51.framework.environment.PerceptionEvent
+import fr.utbm.info.ia51.framework.math.MathUtil
+import fr.utbm.info.ia51.general.motionalgo.KinematicSeekAlgorithm
+import fr.utbm.info.ia51.general.motionalgo.KinematicWanderAlgorithm
+import fr.utbm.info.ia51.general.motionalgo.SeekAlgorithm
+import fr.utbm.info.ia51.general.motionalgo.SteeringSeekAlgorithm
+import fr.utbm.info.ia51.general.motionalgo.SteeringWanderAlgorithm
+import fr.utbm.info.ia51.general.motionalgo.WanderAlgorithm
 import io.sarl.core.Initialize
-import io.sarl.core.Logging
-import io.sarl.core.MemberJoined
-import io.sarl.core.MemberLeft
+import java.util.List
 
 /** 
  * @author c
  * 
  */
-agent Visitor extends BasicPerson{
-	uses Logging
+agent Visitor extends AbstractAnimat {
 
-	on Initialize {
-		// Event trigger before the agent begin to live or to be used.
-		// You should put all the initialization statements in this block of code.
-		info("The visitor was started.")
-		
-	}
-	on Destroy {
-		// Event trigger when the agent is destroyed from the system.
-		// You should put all the resource releasing statements in this block of code.
-		info("The agent was stopped.")
-	}
+	var seekBehaviour : SeekAlgorithm
+	var wanderBehaviour : WanderAlgorithm
 
-	on AgentSpawned {
-		// A new agent has been spawned in our context.
-	}
+	val STOP_RADIUS = MathUtil.PI / 10f
+	val SLOW_RADIUS = MathUtil.PI / 4f
+	val WANDER_CIRCLE_DISTANCE = 60f
+	val WANDER_CIRCLE_RADIUS = 20f
+	val WANDER_MAX_ROTATION = MathUtil.PI / 10f
 
-	on AgentKilled {
-		// A new agent has been killed in our context.
-	}
-
-	on ContextJoined {
-		// Event trigger when an agent of the level joins a shared context.
-		// Sent to a agent of the same level.
+	// This function is called from "on Initialize" in the super type.
+	override overridableInitializationStage(it : Initialize) {
+		super.overridableInitializationStage(it)
+		if (this.behaviorType == DynamicType::STEERING) {
+			this.seekBehaviour = new SteeringSeekAlgorithm
+			this.wanderBehaviour = new SteeringWanderAlgorithm(WANDER_CIRCLE_DISTANCE, WANDER_CIRCLE_RADIUS,
+				WANDER_MAX_ROTATION, STOP_RADIUS, SLOW_RADIUS)
+		} else {
+			this.seekBehaviour = new KinematicSeekAlgorithm
+			this.wanderBehaviour = new KinematicWanderAlgorithm
+		}
 	}
 
-	on ContextLeft {
-		// Event trigger when an agent of the level jleaves a shared context.
-		// Sent to a agent of the same level.
+	def extractTarget(percepts : List<Percept>) : Percept {
+		var targets = percepts.filter[it.type == "TARGET"]
+		if (targets.empty) {
+			null
+		} else {
+			targets.get(0)
+		}
 	}
 
-	on MemberJoined {
-		// Event trigger when an agent joins one of our shared super-holons.
-		// Sent to all members of the considered super-holon.
+	on PerceptionEvent {
+		var target = occurrence.perceptions.extractTarget
+
+		if (target !== null) {
+			// run the seek behaviour
+			this.seekBehaviour.run(
+				occurrence.body.position,
+				occurrence.body.currentLinearSpeed,
+				occurrence.body.maxLinear,
+				target.position
+			).emitInfluence
+		} else {
+			// doNothing
+			// // run the wander behaviour
+			this.wanderBehaviour.run(
+				occurrence.body.position,
+				occurrence.body.direction,
+				occurrence.body.currentLinearSpeed,
+				occurrence.body.maxLinear,
+				occurrence.body.currentAngularSpeed,
+				occurrence.body.maxAngular
+			).emitInfluence
+		}
 	}
 
-	on MemberLeft {
-		// Event trigger when an agent leaves one of our shared super-holons.
-		// Sent to all members of the considered super-holon.
-	}
 }
