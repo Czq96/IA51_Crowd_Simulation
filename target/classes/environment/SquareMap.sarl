@@ -31,13 +31,15 @@ import java.util.ArrayList;
  */
 class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
-	static val VISITOR_SIZE = 20f //TODO: change to image
+	static val VISITOR_SIZE = 20f // TODO: change to image
+	static val SHOP_SIZE = 20f // TODO: change to image
+	
 
-	var agentBodyList = new ArrayList<AgentBody>
+	var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
+	var shopBodyList = new ArrayList<ShopBody>  
 	
 	var mouseTarget : MouseTarget
-	
-	// TODO AgentBody
+
 	
 	/** 
 	 * @param width is the width of the world.
@@ -46,6 +48,25 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	new (width : float, height : float) {
 		super(width, height, new StepTimeManager(500))
 		//this.spatialList = new List<>()
+	}
+
+	def createShop {
+		var id = UUID::randomUUID
+		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
+		var body = new ShopBody(
+			id, 
+			new Circle2f(0f, 0f, SHOP_SIZE), // body
+			5f, // max linear speed m/s
+			0.5f, // max linear acceleration (m/s)/s
+			MathUtil.PI / 4f, // max angular speed r/s
+			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+			frustum)
+		body.name = MessageFormat::format("Shop #{0}", this.shopBodyNumber + 1)
+		addShopBody(
+			body, 
+			randomPosition, 
+			Math::random as float * MathUtil.TWO_PI)
+		// TODO: randomPosition
 	}
 
 	def createVisitor {
@@ -62,7 +83,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		body.name = MessageFormat::format("Visitor #{0}", this.agentBodyNumber + 1)
 		addAgentBody(
 			body, 
-			randomPosition,
+			randomPosition,// TODO: 初始化的地址要在公园的入口
 			Math::random as float * MathUtil.TWO_PI)
 	}
 
@@ -74,6 +95,10 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	 protected def onAgentBodyCreated(body : AgentBody) {
 		this.agentBodyList.add(body) // initialize visitor
+	}
+
+	protected def onShopBodyCreated(body : ShopBody) {
+		this.shopBodyList.add(body) 	// initialize shop
 	}
 	
 	protected def onAgentBodyDestroyed(body : AgentBody) {
@@ -120,7 +145,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		if (this.mouseTarget !== null) {
 			return CollectionUtil.newIterable(this.agentBodies, this.mouseTarget)
 		}
-		return this.agentBodies
+		return this.agentBodies + this.shopBodies
 			}
 	
 	def setMouseTarget(target : Point2f) {
@@ -171,5 +196,6 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		}
 
 	}
-
+	
+	
 }

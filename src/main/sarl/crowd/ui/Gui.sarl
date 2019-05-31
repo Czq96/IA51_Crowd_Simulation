@@ -28,6 +28,11 @@ public class Gui extends AbstractFrameworkGUI {
 	static var ICON_WIDTH : int
 	static var ICON_HEIGHT : int
 
+	static var SHOP_ICON : Icon
+	static var SHOP_ICON_WIDTH : int
+	static var SHOP_ICON_HEIGHT : int  //用于计算画的时候的起始点
+	
+
 	static val FAKE = {
 		var url = Resources.getResource(typeof(Gui), "visitor.png") // $NON-NLS-1$
 		assert url !== null
@@ -37,6 +42,13 @@ public class Gui extends AbstractFrameworkGUI {
 //		CARROT_ICON = new ImageIcon(url)
 		ICON_WIDTH = VISITOR_ICON.iconWidth
 		ICON_HEIGHT = VISITOR_ICON.iconHeight
+
+		var urlShop = Resources.getResource(typeof(Gui), "shop.png") // 位置在resources
+		assert urlShop !== null
+		SHOP_ICON = new ImageIcon(urlShop)
+		SHOP_ICON_WIDTH = SHOP_ICON.iconWidth
+		SHOP_ICON_HEIGHT = SHOP_ICON.iconHeight
+		 
 		null
 	}
 
@@ -71,10 +83,10 @@ public class Gui extends AbstractFrameworkGUI {
 	}
 	
 	protected def isMouseCursorHidden : boolean {
-		true
+		false
 	}
 
-	//用来画人的图像和方向
+	//用png代替小圆圈
 	protected def paintIcon(g2d : Graphics2D, icon : Icon, position : Point2f, orientation : Vector2f) {
 		if (orientation !== null) {
 			g2d.draw(new Line2D.Float(position.x, position.y, position.x + orientation.x * DIRECTION_RADIUS * 1.5f,
@@ -83,6 +95,7 @@ public class Gui extends AbstractFrameworkGUI {
 		icon.paintIcon(this, g2d, position.x as int - ICON_WIDTH / 2, position.y as int - ICON_HEIGHT / 2);
 	}
 
+	// 用来画人的图像和方向
 	override paintAgentBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
 		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
 		var bounds = shape.bounds
@@ -110,6 +123,7 @@ public class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
+	//底下的选择栏
 	override paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
 		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f) {
 		var bounds = shape.bounds
@@ -140,6 +154,41 @@ public class Gui extends AbstractFrameworkGUI {
 			g2d.drawString(
 					"(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
 					bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
+	}
+
+	protected def paintShopIcon(g2d : Graphics2D, icon : Icon, position : Point2f, orientation : Vector2f) {
+		if (orientation !== null) {
+			g2d.draw(new Line2D.Float(position.x, position.y, position.x + orientation.x * DIRECTION_RADIUS * 1.5f,
+				position.y + orientation.y * DIRECTION_RADIUS * 1.5f));
+		}
+		icon.paintIcon(this, g2d, position.x as int - SHOP_ICON_WIDTH / 2, position.y as int - SHOP_ICON_HEIGHT / 2);
+	}
+	
+	// 用来画  商店  的图像和方向
+	override paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+		var bounds = shape.bounds
+		g2d.color = Color::BLUE
+		if (this.showIcons.selected) {
+			paintShopIcon(g2d, SHOP_ICON, positionOnScreen, orientationOnScreen)
+
+		} else {
+			orientationOnScreen.scale(DIRECTION_RADIUS)
+			g2d.draw(
+				new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
+					positionOnScreen.y + orientationOnScreen.y))
+			g2d.fill(shape)
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+				bounds.maxX as float + 2, bounds.maxY as float + 2)
 			g2d.font = oldFont
 		}
 	}

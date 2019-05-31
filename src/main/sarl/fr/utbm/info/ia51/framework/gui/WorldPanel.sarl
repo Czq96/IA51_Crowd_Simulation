@@ -31,6 +31,7 @@ import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
 import java.lang.ref.WeakReference
 import javax.swing.JPanel
+import environment.ShopBody
 
 /** Graphical panel for displaying the world.
  *
@@ -80,6 +81,7 @@ class WorldPanel extends JPanel {
 		this.window.paintAxes(g2d)
 	}
 
+//这里调用了绘画所有物体
 	private def drawObjects(g2d : Graphics2D, currentDim : Dimension) {
 		val state = this.window.lastWorldState
 		if (state === null) return;
@@ -104,7 +106,21 @@ class WorldPanel extends JPanel {
 					o.name,
 					o.position,
 					this.window.mas2screen(frustumShape))
-			} else {
+			} 
+			else if (o instanceof ShopBody) {
+				var frustum = o.frustum
+				var frustumShape = frustum?.toShape(o.position, o.direction)
+				this.window.paintShopBody(
+					g2d, 
+					positionOnScreen, 
+					directionOnScreen, 
+					awtShape,
+					o.type,
+					o.name,
+					o.position, 
+					this.window.mas2screen(frustumShape))
+			}
+			else {
 				this.window.paintSituatedObject(
 					g2d,
 					positionOnScreen,

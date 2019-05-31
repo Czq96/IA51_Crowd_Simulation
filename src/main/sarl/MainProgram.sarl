@@ -18,7 +18,8 @@ agent SimulationLauncher extends FrameworkLauncher {
 	val WORLD_SIZE_X = 700f
 	val WORLD_SIZE_Y = 700f
 	val NUMBER_VISITOR = 3
-
+	val NUMBER_SHOP : int = 5
+ 
 	override initializeSimulation(parameters : List<Object>) : boolean {
 	var type = BehaviorTypeSelector.open
 	if (type !== null) {
@@ -28,6 +29,9 @@ agent SimulationLauncher extends FrameworkLauncher {
 		//TODO: 完成visitor 和 environment
 		for (i : 1 .. NUMBER_VISITOR) {
 			environment.createVisitor
+		}
+		for (i : 1 .. NUMBER_SHOP) {
+			environment.createShop
 		}
 		
 		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)

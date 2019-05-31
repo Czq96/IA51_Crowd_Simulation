@@ -148,6 +148,11 @@ interface FrameworkGUI extends EnvironmentListener {
 	def paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f,
 		orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f)
 
+
+	def paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
+
+
 	/** Change the mouse target.
 	 * 
 	 * @param screenPosition the position of the target on the screen

@@ -113,7 +113,7 @@ abstract class AbstractFrameworkGUI extends JFrame implements FrameworkGUI {
 
 		content.layout = new BorderLayout
 
-		var world = new WorldPanel(this, isMouseCursorHidden)
+		var world = new WorldPanel(this, isMouseCursorHidden) // 新建的worldPanel 中会带哦用绘画物体
 		this.worldWidth = worldWidth
 		this.worldHeight = worldHeight
 		this.timeManager = timeManager
@@ -193,7 +193,7 @@ abstract class AbstractFrameworkGUI extends JFrame implements FrameworkGUI {
 				this.environment = ^event.stateProvider
 			}
 			this.lastState = this.environment.state
-			repaint
+			repaint  // repaint !!! 环境变化后重新画人物等
 		}
 	}
 

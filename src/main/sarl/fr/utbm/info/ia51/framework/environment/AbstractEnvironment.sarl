@@ -32,6 +32,7 @@ import java.util.Map
 import java.util.TreeMap
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
+import environment.ShopBody
 
 /**
  * Abstract implementation of a situated environment.  
@@ -42,6 +43,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 abstract class AbstractEnvironment implements Environment {
 
 	val agentBodyList : Map<UUID, AgentBody> = new TreeMap
+	val shopBodyList : Map<UUID, ShopBody> = new TreeMap // TODO: 拆分老师的framework
 	val timeManager : TimeManager
 	val width : float
 	val height : float
@@ -125,6 +127,27 @@ abstract class AbstractEnvironment implements Environment {
 		}
 	}
 
+//修改了framework , 将shop添加到environment中
+	protected synchronized def addShopBody(body : ShopBody, position : Point2f, direction : float) {
+		if (this.init.get) {
+			synchronized (this.shopBodyList) {
+				this.shopBodyList.put(body.ID, body)
+			}
+			body.position = position
+			body.angle = direction
+			body.onShopBodyCreated
+		} else {
+			throw new IllegalStateException("You cannot call this function after the start of the simulation");
+		}
+	}
+
+	/** Invoked when an shop body is created.
+	 * 
+	 * @param body the body.
+	 */
+	protected abstract def onShopBodyCreated(body : ShopBody)
+	
+
 	/** Invoked when an agent body is created.
 	 * 
 	 * @param body the body.
@@ -153,9 +176,22 @@ abstract class AbstractEnvironment implements Environment {
 		}
 	}
 
+	def getShopBodies : Iterable<ShopBody> {
+		synchronized (this.shopBodyList) {
+			return Collections.unmodifiableCollection(this.shopBodyList.values)
+		}
+	}
+
 	override getAgentBodyNumber : int {
 		synchronized (this.agentBodyList) {
 			return this.agentBodyList.size
+		}
+	}
+
+	//shop 
+	def getShopBodyNumber : int {
+		synchronized (this.shopBodyList) {
+			return this.shopBodyList.size
 		}
 	}
 
