@@ -28,6 +28,7 @@ import fr.utbm.info.ia51.framework.math.Vector2f
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
+ //TODO: 创建新的不会动的 obj 的interface
 interface MobileObject extends SituatedObject {
 
 	/** Replies the orientation of the object.

@@ -24,6 +24,7 @@ import java.util.List
 import java.util.UUID
 import java.text.MessageFormat
 import java.util.ArrayList;
+import fr.utbm.info.ia51.framework.environment.AbstractSituatedObject
 
 /** 
  * Model of the world.
@@ -163,10 +164,23 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	}
 	
 	def getAllObjects : Iterable<? extends SituatedObject> {
+		
+//		var allObj : Iterable<AbstractSituatedObject> 
+//		if (this.mouseTarget !== null) {
+//			allObj= CollectionUtil.newIterable(this.agentBodies, this.mouseTarget)
+//		}
+//		
+//		for(shop : this.shopBodies)
+//		{
+//			allObj = CollectionUtil.newIterable(allObj, shop)
+//		}
+////		
 		if (this.mouseTarget !== null) {
-			return CollectionUtil.newIterable(this.agentBodies, this.mouseTarget)
+			return CollectionUtil.newIterable(this.agentBodies + this.shopBodies, this.mouseTarget)
 		}
-		return this.agentBodies + this.shopBodies
+		return this.agentBodies+this.shopBodies
+
+//		return allObj
 			}
 
 	override setMouseTarget(target : Point2f) {

@@ -43,7 +43,7 @@ import environment.ShopBody
 abstract class AbstractEnvironment implements Environment {
 
 	val agentBodyList : Map<UUID, AgentBody> = new TreeMap
-	val shopBodyList : Map<UUID, ShopBody> = new TreeMap // TODO: 拆分老师的framework
+	val shopBodyList : Map<UUID, ShopBody> = new TreeMap //
 	val timeManager : TimeManager
 	val width : float
 	val height : float
@@ -215,6 +215,13 @@ abstract class AbstractEnvironment implements Environment {
 			bodies = new ArrayList(this.agentBodyList.size)
 			bodies.addAll(this.agentBodyList.values)
 		}
+
+		var shopBodies : List<ShopBody>
+		synchronized (this.shopBodyList) {
+			shopBodies = new ArrayList(this.shopBodyList.size)
+			shopBodies.addAll(this.shopBodyList.values)
+		}
+		
 		for(body : bodies) {
 			var mi = body.consumeMotionInfluence
 			if (mi !== null) {
