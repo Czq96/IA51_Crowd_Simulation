@@ -66,7 +66,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			body, 
 			randomPosition, 
 			Math::random as float * MathUtil.TWO_PI)
-		// TODO: randomPosition
+		// TODO: randomPosition s
 	}
 
 	def createVisitor {
@@ -105,8 +105,9 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		throw new UnsupportedOperationException("TODO: onAgentBodyDestroyed")
 	}
 	
+	// 运行behavior后的状态
 	protected def computeEndogenousBehaviorInfluences : List<Influence> {
-		throw new UnsupportedOperationException("TODO: computeEndogenousBehaviorInfluences")
+		emptyList
 	}
 	
 	protected def computePerceptionsFor(^agent : AgentBody) : List<Percept> {
@@ -118,7 +119,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	
 	protected def applyInfluences(motionInfluences : Collection<MotionInfluence>,
 		otherInfluences : Collection<Influence>, timeManager : TimeManager) {
-		//var actions = new ArrayList<AnimatAction>(motionInfluences.size());
+		var actions = new ArrayList<AnimatAction>(motionInfluences.size());
 		for (index1 : 0 ..< motionInfluences.size) {
 			var inf1 = motionInfluences.get(index1)
 			var body1 = getAgentBodyFor(inf1.emitter)
@@ -132,13 +133,33 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 				rotation = body1.computeKinematicRotation(inf1.angularInfluence, timeManager)
 			}
 
-			//actions += new AnimatAction(body1, move, rotation)
+			actions += new AnimatAction(body1, move, rotation)
 
 		}
 
 		// Apply the actions
+		for (action : actions) {
+			var body = action.objectToMove
+			if (body !== null) {
+				body.move(action.translation, action.rotation)
+			}
+		}
 	
-		
+	}
+
+	private def trivialCollisionDetection(index1 : int, influenceList : List<MotionInfluence>, body1Bounds : Shape2f<?>,
+		move : Vector2f) {
+		for (index2 : (index1 + 1) ..< influenceList.size) {
+			var inf2 = influenceList.get(index2)
+			var body2 = getAgentBodyFor(inf2.emitter)
+			if (body2 !== null) {
+				val body2Bounds = body2.shape
+				if (body1Bounds.intersects(body2Bounds)) {
+					move.set(0, 0)
+					return
+				}
+			}
+		}
 	}
 	
 	def getAllObjects : Iterable<? extends SituatedObject> {
@@ -147,13 +168,17 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		}
 		return this.agentBodies + this.shopBodies
 			}
-	
-	def setMouseTarget(target : Point2f) {
-		//this.mouseTarget = null
-		
-		
-	}
 
+	override setMouseTarget(target : Point2f) {
+		if (target === null) {
+			var r = randomPosition
+			this.mouseTarget = new MouseTarget(r.x, r.y)  
+		}
+		else 
+			this.mouseTarget = new MouseTarget(target.x, target.y)
+	}
+	
+	
 	private static class AnimatAction {
 
 		val body : AgentBody

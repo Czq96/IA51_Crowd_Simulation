@@ -75,6 +75,7 @@ agent EnvironmentAgent {
 		killMe
 	}
 	
+	//  
 	on StartSimulation {
 		runEnvironmentBehavior
 	}
