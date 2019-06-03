@@ -1,0 +1,51 @@
+package environment
+
+import fr.utbm.info.ia51.framework.math.Shape2f
+import java.util.ArrayList
+import java.util.UUID
+import fr.utbm.info.ia51.framework.math.Vector2f
+import fr.utbm.info.ia51.framework.math.MathUtil
+import java.util.List
+import java.text.MessageFormat
+import fr.utbm.info.ia51.framework.environment.Frustum
+import fr.utbm.info.ia51.framework.environment.Body
+import fr.utbm.info.ia51.framework.environment.Percept
+import fr.utbm.info.ia51.framework.environment.AbstractSituatedObject
+import java.io.Serializable
+import fr.utbm.info.ia51.framework.math.Point2f
+import fr.utbm.info.ia51.framework.math.Rectangle2f
+
+// 或许可以直接继承  AbstractSituatedObject
+class ExitBody extends AbstractSituatedObject implements Body {
+
+	// 这里的参数在 AbstractSituatedObject 中
+	new (x : Point2f, y : Point2f) {
+		super(UUID::randomUUID, new Rectangle2f(x,y))
+		this.type = "Exit"
+	}
+
+	/** Set the position of the mouse target.
+	 * 
+	 * @param x
+	 * @param y
+	 */
+	def setExitPosition(x : float, y : float) {
+		// *** CAUTION ***
+		// Changing directly the position of the target without going through the influence
+		// solver may cause collision between the target and the agents.
+		setPosition(x, y)
+	}
+	
+	def influenceKinematic(linearInfluence : Vector2f = null, angularInfluence : float = 0) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+	def influenceSteering(linearInfluence : Vector2f = null, angularInfluence : float = 0) {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+	def getPerceivedObjects : List<Percept> {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
+}

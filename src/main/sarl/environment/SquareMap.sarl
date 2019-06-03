@@ -38,6 +38,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
 	var shopBodyList = new ArrayList<ShopBody>  
+	var exitBodyList = new ArrayList<ExitBody> 
 	
 	var mouseTarget : MouseTarget
 
@@ -67,7 +68,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			body, 
 			randomPosition, 
 			Math::random as float * MathUtil.TWO_PI)
-		// TODO: randomPosition s
+		// TODO: randomPosition 放置在 exit 的地方
 	}
 
 	def createVisitor {
@@ -177,7 +178,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 ////		
 		if (this.mouseTarget !== null) {
 			return CollectionUtil.newIterable(this.agentBodies + this.shopBodies, this.mouseTarget)
-		}
+		}// 鼠标的位置可以改为炸弹
 		return this.agentBodies+this.shopBodies
 
 //		return allObj
