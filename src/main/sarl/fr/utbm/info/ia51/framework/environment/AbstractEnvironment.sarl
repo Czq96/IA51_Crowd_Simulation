@@ -20,6 +20,11 @@
  */
 package fr.utbm.info.ia51.framework.environment
 
+import environment.ChurchBody
+import environment.EntranceBody
+import environment.ExitBody
+import environment.ShopBody
+import environment.WallBody
 import fr.utbm.info.ia51.framework.math.Point2f
 import fr.utbm.info.ia51.framework.math.Vector2f
 import fr.utbm.info.ia51.framework.time.TimeManager
@@ -32,7 +37,6 @@ import java.util.Map
 import java.util.TreeMap
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
-import environment.ShopBody
 
 /**
  * Abstract implementation of a situated environment.  
@@ -44,6 +48,10 @@ abstract class AbstractEnvironment implements Environment {
 
 	val agentBodyList : Map<UUID, AgentBody> = new TreeMap
 	val shopBodyList : Map<UUID, ShopBody> = new TreeMap //
+	var churchBodyList : Map<UUID, ChurchBody> = new TreeMap
+	var wallBodyList : Map<UUID, WallBody> = new TreeMap
+	var exitBodyList : Map<UUID, ExitBody> = new TreeMap
+	var entranceBodyList : Map<UUID, EntranceBody> = new TreeMap
 	val timeManager : TimeManager
 	val width : float
 	val height : float
@@ -141,6 +149,59 @@ abstract class AbstractEnvironment implements Environment {
 		}
 	}
 
+	protected synchronized def addChurchBody(body : ChurchBody, position : Point2f, direction : float) {
+		if (this.init.get) {
+			synchronized (this.churchBodyList) {
+				this.churchBodyList.put(body.ID,body)
+			}
+			body.position = position
+			body.angle = direction
+			body.onChurchBodyCreated
+		} else {
+			throw new IllegalStateException("You cannot call this function after the start of the simulation");
+		}
+	}
+
+	protected synchronized def addWallBody(body : WallBody, position : Point2f, direction : float) {
+		if (this.init.get) {
+			synchronized (this.wallBodyList) {
+				this.wallBodyList.put(body.ID, body)
+			}
+			body.position = position
+			body.angle = direction
+			body.onWallBodyCreated
+		} else {
+			throw new IllegalStateException("You cannot call this function after the start of the simulation");
+		}
+	}
+
+	protected synchronized def addExitBody(body : ExitBody, position : Point2f, direction : float) {
+		if (this.init.get) {
+			synchronized (this.exitBodyList) {
+				this.exitBodyList.put(body.ID, body)
+			}
+			body.position = position
+			body.angle = direction
+			body.onExitBodyCreated
+		} else {
+			throw new IllegalStateException("You cannot call this function after the start of the simulation");
+		}
+	}
+
+	protected synchronized def addEntranceBody(body : EntranceBody, position : Point2f, direction : float) {
+		if (this.init.get) {
+			synchronized (this.entranceBodyList) {
+				this.entranceBodyList.put(body.ID, body)
+			}
+			body.position = position
+			body.angle = direction
+			body.onEntranceBodyCreated
+		} else {
+			throw new IllegalStateException("You cannot call this function after the start of the simulation");
+		}
+	}
+	
+	
 	/** Invoked when an shop body is created.
 	 * 
 	 * @param body the body.
@@ -158,6 +219,18 @@ abstract class AbstractEnvironment implements Environment {
 	 * 
 	 * @param body the body.
 	 */
+	protected abstract def onChurchBodyCreated(body : ChurchBody)
+
+	/** Invoked when an agent body is created.
+	 * 
+	 * @param body the body.
+	 */
+	protected abstract def onWallBodyCreated(body : WallBody)
+
+	protected abstract def onExitBodyCreated(body : ExitBody)
+
+	protected abstract def onEntranceBodyCreated(body : EntranceBody)
+	
 	protected abstract def onAgentBodyDestroyed(body : AgentBody)
 
 	def getState : WorldModelState {
@@ -182,6 +255,29 @@ abstract class AbstractEnvironment implements Environment {
 		}
 	}
 
+	def getChurchBodies : Iterable<ChurchBody> {
+		synchronized (this.churchBodyList) {
+			return Collections.unmodifiableCollection(this.churchBodyList.values)
+		}
+	}
+
+	def getWallBodies : Iterable<WallBody> {
+		synchronized (this.wallBodyList) {
+			return Collections.unmodifiableCollection(this.wallBodyList.values)
+		}
+	}
+
+	def getExitBodies : Iterable<ExitBody> {
+		synchronized (this.exitBodyList) {
+			return Collections.unmodifiableCollection(this.exitBodyList.values)
+		}
+	}
+
+	def getEntranceBodies : Iterable<EntranceBody> {
+		synchronized (this.wallBodyList) {
+			return Collections.unmodifiableCollection(this.entranceBodyList.values)
+		}
+	}
 	override getAgentBodyNumber : int {
 		synchronized (this.agentBodyList) {
 			return this.agentBodyList.size
@@ -195,6 +291,23 @@ abstract class AbstractEnvironment implements Environment {
 		}
 	}
 
+	def getWallBodyNumber : int {
+		synchronized (this.wallBodyList) {
+			return this.wallBodyList.size
+		}
+	}
+
+	def getExitBodyNumber : int {
+		synchronized (this.exitBodyList) {
+			return this.exitBodyList.size
+		}
+	}
+
+	def getEntranceBodyNumber : int {
+		synchronized (this.entranceBodyList) {
+			return this.entranceBodyList.size
+		}
+	}
 	override getAgentBodyFor(agentId : UUID) : AgentBody {
 		synchronized (this.agentBodyList) {
 			return this.agentBodyList.get(agentId)

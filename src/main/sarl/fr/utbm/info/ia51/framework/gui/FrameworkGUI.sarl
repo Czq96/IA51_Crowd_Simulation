@@ -149,9 +149,20 @@ interface FrameworkGUI extends EnvironmentListener {
 		orientationOnScreen : Vector2f, shape : Shape, type : Serializable, name : String, positionInMas : Point2f)
 
 
-	def paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+	def paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, 
+		shape : Shape, type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
+
+	def paintChurchBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, 
+		shape : Shape, type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
+
+	def paintWallBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
 		type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
 
+	def paintExitBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
+
+	def paintEntranceBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
 
 	/** Change the mouse target.
 	 * 

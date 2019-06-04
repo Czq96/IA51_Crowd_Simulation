@@ -1,38 +1,53 @@
-import environment.*
-import crowd.ui.*
-import io.sarl.core.Logging
-import io.sarl.core.Initialize
-
-import fr.utbm.info.ia51.framework.FrameworkLauncher
-// import fr.utbm.info.ia51.framework.gui.BehaviorTypeSelector
-import fr.utbm.info.ia51.framework.environment.DynamicType
 import ^agent.Visitor
-import environment.SquareMap
 import crowd.ui.Gui
-import java.util.List
+import environment.SquareMap
+import fr.utbm.info.ia51.framework.FrameworkLauncher
 import fr.utbm.info.ia51.framework.gui.BehaviorTypeSelector
+import java.util.List
+import resultGenerater.MapData
 
 agent SimulationLauncher extends FrameworkLauncher {
 
 	
+	
 	val WORLD_SIZE_X = 700f
 	val WORLD_SIZE_Y = 700f
 	val NUMBER_VISITOR = 3
-	val NUMBER_SHOP : int = 5
- 
+	val NUMBER_SHOP : int = 24
+	val NUMBER_CHURCH  : int=1
+	val NUMBER_WALL : int = 56
+	val NUMBER_ENTRANCE : int = 1
+	val NUMBER_EXIT : int = 2
+
 	override initializeSimulation(parameters : List<Object>) : boolean {
+	
+	var mapData : MapData = new MapData
 	var type = BehaviorTypeSelector.open
 	if (type !== null) {
 		var environment = new SquareMap(WORLD_SIZE_X, WORLD_SIZE_Y)
 
 		//var type = DynamicType.KINEMATIC ;// 这里是DynamicType 类型， 是agent的行为类型
 		//TODO: 完成visitor 和 environment
+		
+		environment.createChurch
+		
 		for (i : 1 .. NUMBER_VISITOR) {
 			environment.createVisitor
 		}
 		for (i : 1 .. NUMBER_SHOP) {
-			environment.createShop
+			environment.createShop(mapData.shopPositionList.get(i - 1))
 		}
+		for (i : 1..NUMBER_WALL) {
+			environment.createWall(mapData.wallPositionList.get(i - 1))
+		}
+		for (i : 1 .. NUMBER_EXIT) {
+			environment.createExit(mapData.exitPositionList.get(i - 1))
+		}
+		for (i : 1 .. NUMBER_ENTRANCE) {
+			environment.createEntrance(mapData.entrancePositionList.get(i - 1))
+		}
+		
+		
 		
 		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)
 		

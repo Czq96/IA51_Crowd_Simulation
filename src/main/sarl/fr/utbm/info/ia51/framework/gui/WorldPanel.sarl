@@ -20,6 +20,11 @@
  */
 package fr.utbm.info.ia51.framework.gui
 
+import environment.ChurchBody
+import environment.EntranceBody
+import environment.ExitBody
+import environment.ShopBody
+import environment.WallBody
 import fr.utbm.info.ia51.framework.environment.AgentBody
 import fr.utbm.info.ia51.framework.environment.MobileObject
 import fr.utbm.info.ia51.framework.math.Vector2f
@@ -31,7 +36,6 @@ import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
 import java.lang.ref.WeakReference
 import javax.swing.JPanel
-import environment.ShopBody
 
 /** Graphical panel for displaying the world.
  *
@@ -119,6 +123,40 @@ class WorldPanel extends JPanel {
 					o.name,
 					o.position, 
 					this.window.mas2screen(frustumShape))
+				
+			} 
+			else if (o instanceof WallBody) {
+				var frustum = o.frustum
+				var frustumShape = frustum?.toShape(o.position, o.direction)
+				this.window.paintWallBody(
+					g2d, 
+					positionOnScreen, 
+					directionOnScreen, 
+					awtShape, 
+					o.type, 
+					o.name,
+					o.position, 
+					this.window.mas2screen(frustumShape))
+					
+					} 
+			else if (o instanceof ChurchBody) {
+				var frustum = o.frustum
+				var frustumShape = frustum?.toShape(o.position, o.direction)
+				this.window.paintChurchBody(g2d, positionOnScreen, directionOnScreen, awtShape, o.type, o.name,
+					o.position, this.window.mas2screen(frustumShape))
+
+			} else if (o instanceof ExitBody) {
+				var frustum = o.frustum
+				var frustumShape = frustum?.toShape(o.position, o.direction)
+				this.window.paintExitBody(g2d, positionOnScreen, directionOnScreen, awtShape, o.type, o.name,
+					o.position, this.window.mas2screen(frustumShape))
+
+			} else if (o instanceof EntranceBody) {
+				var frustum = o.frustum
+				var frustumShape = frustum?.toShape(o.position, o.direction)
+				this.window.paintEntranceBody(g2d, positionOnScreen, directionOnScreen, awtShape, o.type, o.name,
+					o.position, this.window.mas2screen(frustumShape))
+
 			}
 			else {
 				this.window.paintSituatedObject(

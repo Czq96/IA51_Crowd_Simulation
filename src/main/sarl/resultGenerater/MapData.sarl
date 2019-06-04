@@ -1,0 +1,50 @@
+package resultGenerater
+
+import fr.utbm.info.ia51.framework.math.Point2f
+import java.util.ArrayList
+
+class MapData{
+	
+	public var shopPositionList : ArrayList<Point2f>
+	public var wallPositionList : ArrayList<Point2f>
+	public var exitPositionList : ArrayList<Point2f>
+	public var entrancePositionList : ArrayList<Point2f>
+	
+	
+	new{
+		shopPositionList = new ArrayList<Point2f>
+		for(i:1..8){
+			shopPositionList.add(new Point2f(100 + i * 55, 500))
+			shopPositionList.add(new Point2f(100 + i * 55, 350))
+			shopPositionList.add(new Point2f(100 + i * 55, 200))
+		}
+		wallPositionList = new ArrayList<Point2f>
+		for(i : 0..3){
+			wallPositionList.add(new Point2f(425 + i * 50, 675))
+			wallPositionList.add(new Point2f(275 - i * 50, 675))
+			wallPositionList.add(new Point2f(525 + i * 50, 675))
+			wallPositionList.add(new Point2f(125 - i * 50, 675))
+		}
+		for(i : 0..7){
+			wallPositionList.add(new Point2f(675, 625 - i * 50))
+			wallPositionList.add(new Point2f(25, 625 - i * 50))
+			wallPositionList.add(new Point2f(25 + i * 50 , 25))
+		}
+		for (i : 9 .. 15) {
+			wallPositionList.add(new Point2f(675, 625 - i * 50))
+			wallPositionList.add(new Point2f(25, 625 - i * 50))
+			wallPositionList.add(new Point2f(25 + i * 50, 25))
+		}
+		
+		entrancePositionList = new ArrayList<Point2f>
+		exitPositionList = new ArrayList<Point2f>
+		
+		entrancePositionList.add(new Point2f(675, 625 - 8 * 50))
+		exitPositionList.add(new Point2f(25, 625 - 8 * 50))
+		exitPositionList.add(new Point2f(25 + 8 * 50, 25))
+			
+			
+		}
+	}
+	
+	

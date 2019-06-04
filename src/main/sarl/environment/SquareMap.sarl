@@ -1,7 +1,7 @@
 package environment
 
 import fr.utbm.info.ia51.framework.environment.AbstractEnvironment
-import fr.utbm.info.ia51.framework.environment.AgentBody // 生成了小兔子
+import fr.utbm.info.ia51.framework.environment.AgentBody
 import fr.utbm.info.ia51.framework.environment.DynamicType
 import fr.utbm.info.ia51.framework.environment.Influence
 import fr.utbm.info.ia51.framework.environment.MotionInfluence
@@ -11,20 +11,17 @@ import fr.utbm.info.ia51.framework.gui.WorldModelStateProvider
 import fr.utbm.info.ia51.framework.math.Circle2f
 import fr.utbm.info.ia51.framework.math.MathUtil
 import fr.utbm.info.ia51.framework.math.Point2f
-import fr.utbm.info.ia51.framework.math.Rectangle2f
 import fr.utbm.info.ia51.framework.math.Shape2f
 import fr.utbm.info.ia51.framework.math.Vector2f
 import fr.utbm.info.ia51.framework.time.StepTimeManager
 import fr.utbm.info.ia51.framework.time.TimeManager
 import fr.utbm.info.ia51.framework.util.CollectionUtil
 import fr.utbm.info.ia51.general.frustum.CircleFrustum
+import java.text.MessageFormat
 import java.util.ArrayList
 import java.util.Collection
 import java.util.List
 import java.util.UUID
-import java.text.MessageFormat
-import java.util.ArrayList;
-import fr.utbm.info.ia51.framework.environment.AbstractSituatedObject
 
 /** 
  * Model of the world.
@@ -35,11 +32,12 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	static val VISITOR_SIZE = 20f // TODO: change to image
 	static val SHOP_SIZE = 20f // TODO: change to image
 	
-
+	var churchBodyList = new ArrayList<ChurchBody> 
 	var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
 	var shopBodyList = new ArrayList<ShopBody>  
 	var exitBodyList = new ArrayList<ExitBody> 
-	
+	var wallBodyList = new ArrayList<WallBody>
+	var entranceBodyList = new ArrayList<EntranceBody>
 	var mouseTarget : MouseTarget
 
 	
@@ -52,7 +50,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		//this.spatialList = new List<>()
 	}
 
-	def createShop {
+	def createShop(positionOnScreen : Point2f) {
 		var id = UUID::randomUUID
 		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
 		var body = new ShopBody(
@@ -66,8 +64,8 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		body.name = MessageFormat::format("Shop #{0}", this.shopBodyNumber + 1)
 		addShopBody(
 			body, 
-			randomPosition, 
-			Math::random as float * MathUtil.TWO_PI)
+			positionOnScreen, //real position
+		Math::random as float * MathUtil.TWO_PI)
 		// TODO: randomPosition 放置在 exit 的地方
 	}
 
@@ -89,6 +87,72 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			Math::random as float * MathUtil.TWO_PI)
 	}
 
+   def createChurch  {
+
+		var id = UUID::randomUUID
+		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
+		var body :ChurchBody = new ChurchBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
+			5f, // max linear speed m/s
+			0.5f, // max linear acceleration (m/s)/s
+			MathUtil.PI / 4f, // max angular speed r/s
+			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+			frustum)
+		body.name = MessageFormat::format("Shop #{0}", this.shopBodyNumber + 1)
+		addChurchBody(
+			body, 
+			new Point2f(325f,675f), //real position
+			Math::random as float * MathUtil.TWO_PI)
+	
+	}
+
+	def createWall(positionOnScreen : Point2f) {
+
+		var id = UUID::randomUUID
+		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
+		var body : WallBody = new WallBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
+		5f, // max linear speed m/s
+		0.5f, // max linear acceleration (m/s)/s
+		MathUtil.PI / 4f, // max angular speed r/s
+		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+			frustum)
+		body.name = MessageFormat::format("Shop #{0}", this.wallBodyNumber + 1)
+		addWallBody(body, positionOnScreen, //real position
+		Math::random as float * MathUtil.TWO_PI)
+
+	}
+
+	def createExit(positionOnScreen : Point2f) {
+
+		var id = UUID::randomUUID
+		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
+		var body : ExitBody = new ExitBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
+		5f, // max linear speed m/s
+		0.5f, // max linear acceleration (m/s)/s
+		MathUtil.PI / 4f, // max angular speed r/s
+		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+		frustum)
+		body.name = MessageFormat::format("Shop #{0}", this.exitBodyNumber + 1)
+		addExitBody(body, positionOnScreen, // real position
+		Math::random as float * MathUtil.TWO_PI)
+
+	}
+
+	def createEntrance (positionOnScreen : Point2f) {
+
+		var id = UUID::randomUUID
+		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
+		var body : EntranceBody = new EntranceBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
+		5f, // max linear speed m/s
+		0.5f, // max linear acceleration (m/s)/s
+		MathUtil.PI / 4f, // max angular speed r/s
+		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+		frustum)
+		body.name = MessageFormat::format("Shop #{0}", this.entranceBodyNumber + 1)
+		addEntranceBody(body, positionOnScreen, // real position
+		Math::random as float * MathUtil.TWO_PI)
+
+	}
+
 	protected def randomPosition : Point2f {
 		var x = Math::random as float * this.width - VISITOR_SIZE
 		var y = Math.random() as float * this.height - VISITOR_SIZE
@@ -102,7 +166,22 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	protected def onShopBodyCreated(body : ShopBody) {
 		this.shopBodyList.add(body) 	// initialize shop
 	}
-	
+
+	protected def onChurchBodyCreated(body : ChurchBody) {
+		this.churchBodyList.add(body)
+	}
+
+	protected def onWallBodyCreated(body : WallBody) {
+		this.wallBodyList.add(body)
+	}
+
+	protected def onExitBodyCreated(body : ExitBody) {
+		this.exitBodyList.add(body)
+	}
+
+	protected def onEntranceBodyCreated(body : EntranceBody) {
+		this.entranceBodyList.add(body)
+	}
 	protected def onAgentBodyDestroyed(body : AgentBody) {
 		throw new UnsupportedOperationException("TODO: onAgentBodyDestroyed")
 	}
@@ -177,9 +256,10 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 //		}
 ////		
 		if (this.mouseTarget !== null) {
-			return CollectionUtil.newIterable(this.agentBodies + this.shopBodies, this.mouseTarget)
+			return CollectionUtil.newIterable(this.agentBodies + this.shopBodies + this.churchBodies+this.wallBodies+this.exitBodies+this.entranceBodies, this.mouseTarget)
 		}// 鼠标的位置可以改为炸弹
-		return this.agentBodies+this.shopBodies
+		return this.agentBodies + this.shopBodies + this.churchBodies + this.wallBodies + this.exitBodies +
+			this.entranceBodies
 
 //		return allObj
 			}

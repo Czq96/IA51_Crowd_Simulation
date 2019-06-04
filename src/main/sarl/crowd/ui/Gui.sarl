@@ -22,7 +22,11 @@ import javax.swing.JSlider
 public class Gui extends AbstractFrameworkGUI {
 
 	static val DIRECTION_RADIUS = 30f  // ICON的大小
-
+	
+	static var CHURCH_ICON : Icon
+	static var CHURCH_ICON_WIDTH : int
+	static var CHURCH_ICON_HEIGHT : int 
+	
 	static var VISITOR_ICON : Icon
 	//static var CARROT_ICON : Icon
 	static var ICON_WIDTH : int
@@ -30,13 +34,25 @@ public class Gui extends AbstractFrameworkGUI {
 
 	static var SHOP_ICON : Icon
 	static var SHOP_ICON_WIDTH : int
-	static var SHOP_ICON_HEIGHT : int  //用于计算画的时候的起始点
+	static var SHOP_ICON_HEIGHT : int // 用于计算画的时候的起始点
 	
+	static var WALL_ICON : Icon
+	static var WALL_ICON_WIDTH : int
+	static var WALL_ICON_HEIGHT : int
+
+	static var EXIT_ICON : Icon
+	static var EXIT_ICON_WIDTH : int
+	static var EXIT_ICON_HEIGHT : int
+
+	static var ENTRANCE_ICON : Icon
+	static var ENTRANCE_ICON_WIDTH : int
+	static var ENTRANCE_ICON_HEIGHT : int 
 
 	static val FAKE = {
 		var url = Resources.getResource(typeof(Gui), "visitor.png") // $NON-NLS-1$
 		assert url !== null
 		VISITOR_ICON = new ImageIcon(url)
+		
 		//		url = Resources::getResource(typeof(GUI), "carrot.png") // $NON-NLS-1$
 //		assert url !== null
 //		CARROT_ICON = new ImageIcon(url)
@@ -48,8 +64,33 @@ public class Gui extends AbstractFrameworkGUI {
 		SHOP_ICON = new ImageIcon(urlShop)
 		SHOP_ICON_WIDTH = SHOP_ICON.iconWidth
 		SHOP_ICON_HEIGHT = SHOP_ICON.iconHeight
-		 
+		
+		url = Resources.getResource(typeof(Gui), "church.png")
+		assert url !== null
+		CHURCH_ICON=new ImageIcon(url)
+		CHURCH_ICON_WIDTH = CHURCH_ICON.iconWidth
+		CHURCH_ICON_HEIGHT = CHURCH_ICON.iconHeight
+
+		url = Resources.getResource(typeof(Gui), "wall.png")
+		assert url !== null
+		WALL_ICON = new ImageIcon(url)
+		WALL_ICON_WIDTH = WALL_ICON.iconWidth
+		WALL_ICON_HEIGHT = WALL_ICON.iconHeight
+		
+
+		url = Resources.getResource(typeof(Gui), "entrance.png")
+		assert url !== null
+		ENTRANCE_ICON = new ImageIcon(url)
+		ENTRANCE_ICON_WIDTH = ENTRANCE_ICON.iconWidth
+		ENTRANCE_ICON_HEIGHT = ENTRANCE_ICON.iconHeight
+
+		url = Resources.getResource(typeof(Gui), "exit.png")
+		assert url !== null
+		EXIT_ICON = new ImageIcon(url)
+		EXIT_ICON_WIDTH = EXIT_ICON.iconWidth
+		EXIT_ICON_HEIGHT = EXIT_ICON.iconHeight
 		null
+
 	}
 
 	// create a BottomPanel for simulate control
@@ -108,6 +149,8 @@ public class Gui extends AbstractFrameworkGUI {
 			g2d.draw(
 				new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
 					positionOnScreen.y + orientationOnScreen.y))
+			
+			//fill color
 			g2d.fill(shape)
 		}
 		if (this.showPositions.selected) {
@@ -118,6 +161,142 @@ public class Gui extends AbstractFrameworkGUI {
 			var fmt = new DecimalFormat("#.#")
 			g2d.drawString(
 					"(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+				bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
+	}
+
+	override paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+		var bounds = shape.bounds
+		g2d.color = Color::BLUE
+		if (this.showIcons.selected) {
+			paintObstacleIcon(g2d, SHOP_ICON, positionOnScreen, orientationOnScreen)
+
+		} else {
+			orientationOnScreen.scale(DIRECTION_RADIUS)
+			g2d.draw(
+				new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
+					positionOnScreen.y + orientationOnScreen.y))
+			g2d.fill(shape)
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+				bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
+	}
+
+	override paintChurchBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+		var bounds = shape.bounds
+		g2d.color = Color::BLUE
+		if (this.showIcons.selected) {
+			paintObstacleIcon(g2d, CHURCH_ICON, positionOnScreen, orientationOnScreen)
+
+		} else {
+			orientationOnScreen.scale(DIRECTION_RADIUS)
+			/*g2d.draw(
+				new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
+					positionOnScreen.y + orientationOnScreen.y))*/
+			g2d.fill(shape)
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+				bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
+	}
+
+	override paintWallBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
+		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+		var bounds = shape.bounds
+		g2d.color = Color::BLUE
+		if (this.showIcons.selected) {
+			paintObstacleIcon(g2d, WALL_ICON, positionOnScreen, orientationOnScreen)
+
+		} else {
+			orientationOnScreen.scale(DIRECTION_RADIUS)
+
+			/* g2d.draw(
+			 * new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
+			 * positionOnScreen.y + orientationOnScreen.y))
+			 */
+			g2d.fill(shape)
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+				bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
+	}
+
+	override paintExitBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+		var bounds = shape.bounds
+		g2d.color = Color::BLUE
+		if (this.showIcons.selected) {
+			paintObstacleIcon(g2d, EXIT_ICON, positionOnScreen, orientationOnScreen)
+
+		} else {
+			orientationOnScreen.scale(DIRECTION_RADIUS)
+
+			/* g2d.draw(
+			 * new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
+			 * positionOnScreen.y + orientationOnScreen.y))
+			 */
+			g2d.fill(shape)
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+				bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
+	}
+
+	override paintEntranceBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+		var bounds = shape.bounds
+		g2d.color = Color::BLUE
+		if (this.showIcons.selected) {
+			paintObstacleIcon(g2d, ENTRANCE_ICON, positionOnScreen, orientationOnScreen)
+
+		} else {
+			orientationOnScreen.scale(DIRECTION_RADIUS)
+
+			/* g2d.draw(
+			 * new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
+			 * positionOnScreen.y + orientationOnScreen.y))
+			 */
+			g2d.fill(shape)
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
 				bounds.maxX as float + 2, bounds.maxY as float + 2)
 			g2d.font = oldFont
 		}
@@ -158,39 +337,16 @@ public class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	protected def paintShopIcon(g2d : Graphics2D, icon : Icon, position : Point2f, orientation : Vector2f) {
-		if (orientation !== null) {
+	protected def paintObstacleIcon(g2d : Graphics2D, icon : Icon, position : Point2f, orientation : Vector2f) {
+		/*if (orientation !== null) {
 			g2d.draw(new Line2D.Float(position.x, position.y, position.x + orientation.x * DIRECTION_RADIUS * 1.5f,
 				position.y + orientation.y * DIRECTION_RADIUS * 1.5f));
-		}
+		}*/
 		icon.paintIcon(this, g2d, position.x as int - SHOP_ICON_WIDTH / 2, position.y as int - SHOP_ICON_HEIGHT / 2);
 	}
-	
+
 	// 用来画  商店  的图像和方向
-	override paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
-		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
-		var bounds = shape.bounds
-		g2d.color = Color::BLUE
-		if (this.showIcons.selected) {
-			paintShopIcon(g2d, SHOP_ICON, positionOnScreen, orientationOnScreen)
-
-		} else {
-			orientationOnScreen.scale(DIRECTION_RADIUS)
-			g2d.draw(
-				new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
-					positionOnScreen.y + orientationOnScreen.y))
-			g2d.fill(shape)
-		}
-		if (this.showPositions.selected) {
-			var oldFont = g2d.font
-			var f = oldFont.deriveFont(6)
-			g2d.color = g2d.background.darker
-			g2d.font = f
-			var fmt = new DecimalFormat("#.#")
-			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
-				bounds.maxX as float + 2, bounds.maxY as float + 2)
-			g2d.font = oldFont
-		}
-	}
-
+	
+	
+	
 }

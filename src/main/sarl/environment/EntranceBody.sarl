@@ -1,47 +1,46 @@
 package environment
 
-import fr.utbm.info.ia51.framework.environment.AbstractMobileObject
-import fr.utbm.info.ia51.framework.environment.Body
-import fr.utbm.info.ia51.framework.environment.Frustum
-import fr.utbm.info.ia51.framework.environment.Percept
 import fr.utbm.info.ia51.framework.math.Shape2f
-import fr.utbm.info.ia51.framework.math.Vector2f
-import java.util.List
+import java.util.ArrayList
 import java.util.UUID
+import fr.utbm.info.ia51.framework.math.Vector2f
+import fr.utbm.info.ia51.framework.math.MathUtil
+import java.util.List
+import java.text.MessageFormat
+import fr.utbm.info.ia51.framework.environment.Frustum
+import fr.utbm.info.ia51.framework.environment.Body
+import fr.utbm.info.ia51.framework.environment.Percept
+import fr.utbm.info.ia51.framework.environment.AbstractMobileObject
 
 // 或许可以直接继承  AbstractSituatedObject
-class ExitBody extends AbstractMobileObject implements Body {
+class EntranceBody extends AbstractMobileObject implements Body {
+
 	val frustum : Frustum
 	val type : String
+
 	// 这里的参数在 AbstractSituatedObject 中
-	
 	new (id : UUID, shape : Shape2f<?>, maxLinearSpeed : float, maxLinearAcceleration : float, maxAngularSpeed : float,
 		maxAngularAcceleration : float, frustum : Frustum) {
 		super(id, shape, maxLinearSpeed, maxLinearAcceleration, maxAngularSpeed, maxAngularAcceleration)
 		assert frustum === null || id == frustum.owner
 		this.frustum = frustum
-		this.type = "Exit"
+		this.type = "ENTRANCE"
 	}
-	
 
-	/** Set the position of the mouse target.
-	 * 
-	 * @param x
-	 * @param y
-	 */
 	def getFrustum : Frustum {
 		this.frustum
 	}
+
 	def influenceKinematic(linearInfluence : Vector2f = null, angularInfluence : float = 0) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
-	
+
 	def influenceSteering(linearInfluence : Vector2f = null, angularInfluence : float = 0) {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
 	}
 	
 	def getPerceivedObjects : List<Percept> {
 		throw new UnsupportedOperationException("TODO: auto-generated method stub")
-	}
+	}		
 	
 }
