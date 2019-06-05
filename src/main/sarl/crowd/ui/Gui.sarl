@@ -46,7 +46,11 @@ public class Gui extends AbstractFrameworkGUI {
 
 	static var ENTRANCE_ICON : Icon
 	static var ENTRANCE_ICON_WIDTH : int
-	static var ENTRANCE_ICON_HEIGHT : int 
+	static var ENTRANCE_ICON_HEIGHT : int
+
+	static var BOMB_ICON : Icon
+	static var BOMB_ICON_WIDTH : int
+	static var BOMB_ICON_HEIGHT : int  
 
 	static val FAKE = {
 		var url = Resources.getResource(typeof(Gui), "visitor.png") // $NON-NLS-1$
@@ -89,6 +93,12 @@ public class Gui extends AbstractFrameworkGUI {
 		EXIT_ICON = new ImageIcon(url)
 		EXIT_ICON_WIDTH = EXIT_ICON.iconWidth
 		EXIT_ICON_HEIGHT = EXIT_ICON.iconHeight
+
+		url = Resources.getResource(typeof(Gui), "bomb.png")
+		assert url !== null
+		BOMB_ICON = new ImageIcon(url)
+		BOMB_ICON_WIDTH = BOMB_ICON.iconWidth
+		BOMB_ICON_HEIGHT = BOMB_ICON.iconHeight
 		null
 
 	}
@@ -302,7 +312,7 @@ public class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	//底下的选择栏
+	//显示鼠标的样子
 	override paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
 		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f) {
 		var bounds = shape.bounds
@@ -310,7 +320,7 @@ public class Gui extends AbstractFrameworkGUI {
 
 		var icon : Icon
 		if ("TARGET" == type) {
-			icon = VISITOR_ICON
+			icon = BOMB_ICON
 		}
 
 		if (this.showIcons.selected && icon !== null) {

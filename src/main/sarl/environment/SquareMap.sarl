@@ -97,7 +97,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			MathUtil.PI / 4f, // max angular speed r/s
 			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
 			frustum)
-		body.name = MessageFormat::format("Shop #{0}", this.shopBodyNumber + 1)
+		body.name = MessageFormat::format("Church #{0}", this.shopBodyNumber + 1)
 		addChurchBody(
 			body, 
 			new Point2f(325f,675f), //real position
@@ -115,7 +115,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		MathUtil.PI / 4f, // max angular speed r/s
 		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
 			frustum)
-		body.name = MessageFormat::format("Shop #{0}", this.wallBodyNumber + 1)
+		body.name = MessageFormat::format("Wall #{0}", this.wallBodyNumber + 1)
 		addWallBody(body, positionOnScreen, //real position
 		Math::random as float * MathUtil.TWO_PI)
 
@@ -131,7 +131,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		MathUtil.PI / 4f, // max angular speed r/s
 		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
 		frustum)
-		body.name = MessageFormat::format("Shop #{0}", this.exitBodyNumber + 1)
+		body.name = MessageFormat::format("Exit #{0}", this.exitBodyNumber + 1)
 		addExitBody(body, positionOnScreen, // real position
 		Math::random as float * MathUtil.TWO_PI)
 
@@ -147,7 +147,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		MathUtil.PI / 4f, // max angular speed r/s
 		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
 		frustum)
-		body.name = MessageFormat::format("Shop #{0}", this.entranceBodyNumber + 1)
+		body.name = MessageFormat::format("Entrance #{0}", this.entranceBodyNumber + 1)
 		addEntranceBody(body, positionOnScreen, // real position
 		Math::random as float * MathUtil.TWO_PI)
 
