@@ -12,7 +12,7 @@ agent SimulationLauncher extends FrameworkLauncher {
 	
 	val WORLD_SIZE_X = 700f
 	val WORLD_SIZE_Y = 700f
-	val NUMBER_VISITOR = 3
+	val NUMBER_VISITOR = 6
 	val NUMBER_SHOP : int = 24
 	val NUMBER_CHURCH  : int=1
 	val NUMBER_WALL : int = 56

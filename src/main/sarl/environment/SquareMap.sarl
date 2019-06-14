@@ -30,7 +30,7 @@ import java.util.UUID
 class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	static val VISITOR_SIZE = 20f // TODO: change to image
-	static val SHOP_SIZE = 20f // TODO: change to image
+	static val SHOP_SIZE = 30f // TODO: change to image
 	
 	var churchBodyList = new ArrayList<ChurchBody> 
 	var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
@@ -193,29 +193,67 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	
 	protected def computePerceptionsFor(^agent : AgentBody) : List<Percept> {
 		var allPercepts = new ArrayList<Percept>
-		
-		
 		return allPercepts
 	}
 	
-	protected def applyInfluences(motionInfluences : Collection<MotionInfluence>,
-		otherInfluences : Collection<Influence>, timeManager : TimeManager) {
-		var actions = new ArrayList<AnimatAction>(motionInfluences.size());
-		for (index1 : 0 ..< motionInfluences.size) {
-			var inf1 = motionInfluences.get(index1)
+//	protected def applyInfluences(motionInfluences : Collection<MotionInfluence>,
+//		otherInfluences : Collection<Influence>, timeManager : TimeManager) {
+//		var actions = new ArrayList<AnimatAction>(motionInfluences.size());
+//		for (index1 : 0 ..< motionInfluences.size) {
+//			var inf1 = motionInfluences.get(index1)
+//			var body1 = getAgentBodyFor(inf1.emitter)
+//			var move : Vector2f
+//			var rotation : float
+//			if (inf1.type === DynamicType.STEERING) {
+//				move = body1.computeSteeringTranslation(inf1.linearInfluence, timeManager)
+//				rotation = body1.computeSteeringRotation(inf1.angularInfluence, timeManager)
+//			} else {
+//				move = body1.computeKinematicTranslation(inf1.linearInfluence, timeManager)
+//				rotation = body1.computeKinematicRotation(inf1.angularInfluence, timeManager)
+//			}
+//
+//			actions += new AnimatAction(body1, move, rotation)
+//
+//		}
+//
+//		// Apply the actions
+//		for (action : actions) {
+//			var body = action.objectToMove
+//			if (body !== null) {
+//				body.move(action.translation, action.rotation)
+//			}
+//		}
+//	
+//	}
+
+	override applyInfluences(motionInfluences : Collection<MotionInfluence>, otherInfluences : Collection<Influence>,
+		timeManager : TimeManager) {
+		var influenceList = new ArrayList<MotionInfluence>(motionInfluences)
+		var actions = new ArrayList<AnimatAction>(influenceList.size)
+
+		// Compute actions
+		for (index1 : 0 ..< influenceList.size) {
+			var inf1 = influenceList.get(index1)
 			var body1 = getAgentBodyFor(inf1.emitter)
-			var move : Vector2f
-			var rotation : float
-			if (inf1.type === DynamicType.STEERING) {
-				move = body1.computeSteeringTranslation(inf1.linearInfluence, timeManager)
-				rotation = body1.computeSteeringRotation(inf1.angularInfluence, timeManager)
-			} else {
-				move = body1.computeKinematicTranslation(inf1.linearInfluence, timeManager)
-				rotation = body1.computeKinematicRotation(inf1.angularInfluence, timeManager)
+			if (body1 !== null) {
+				var move : Vector2f
+				var rotation : float
+				if (inf1.type === DynamicType::STEERING) {
+					move = body1.computeSteeringTranslation(inf1.linearInfluence, timeManager)
+					rotation = body1.computeSteeringRotation(inf1.angularInfluence, timeManager)
+				} else {
+					move = body1.computeKinematicTranslation(inf1.linearInfluence, timeManager)
+					rotation = body1.computeKinematicRotation(inf1.angularInfluence, timeManager)
+				}
+
+				var body1Bounds = body1.shape
+
+				// Trivial collision detection
+				trivialCollisionDetection(index1, influenceList, body1Bounds, move)
+
+				actions += new AnimatAction(body1, move, rotation)
+
 			}
-
-			actions += new AnimatAction(body1, move, rotation)
-
 		}
 
 		// Apply the actions
@@ -225,7 +263,6 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 				body.move(action.translation, action.rotation)
 			}
 		}
-	
 	}
 
 	private def trivialCollisionDetection(index1 : int, influenceList : List<MotionInfluence>, body1Bounds : Shape2f<?>,
@@ -243,26 +280,13 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		}
 	}
 	
-	def getAllObjects : Iterable<? extends SituatedObject> {
-		
-//		var allObj : Iterable<AbstractSituatedObject> 
-//		if (this.mouseTarget !== null) {
-//			allObj= CollectionUtil.newIterable(this.agentBodies, this.mouseTarget)
-//		}
-//		
-//		for(shop : this.shopBodies)
-//		{
-//			allObj = CollectionUtil.newIterable(allObj, shop)
-//		}
-////		
+	def getAllObjects : Iterable<? extends SituatedObject> {	
 		if (this.mouseTarget !== null) {
 			return CollectionUtil.newIterable(this.agentBodies + this.shopBodies + this.churchBodies+this.wallBodies+this.exitBodies+this.entranceBodies, this.mouseTarget)
-		}// 鼠标的位置可以改为炸弹
+		}
 		return this.agentBodies + this.shopBodies + this.churchBodies + this.wallBodies + this.exitBodies +
 			this.entranceBodies
-
-//		return allObj
-			}
+	}
 
 	override setMouseTarget(target : Point2f) {
 		if (target === null) {

@@ -324,7 +324,7 @@ abstract class AbstractEnvironment implements Environment {
 		var motionInfluences = new ArrayList<MotionInfluence>
 		var otherInfluences = new ArrayList<Influence>
 		var bodies : List<AgentBody>
-		synchronized (this.agentBodyList) {
+		synchronized (this.agentBodyList) {// 应该再加一个所有 situated 物体的 list
 			bodies = new ArrayList(this.agentBodyList.size)
 			bodies.addAll(this.agentBodyList.values)
 		}
@@ -336,7 +336,7 @@ abstract class AbstractEnvironment implements Environment {
 		}
 		
 		for(body : bodies) {
-			var mi = body.consumeMotionInfluence
+			var mi = body.consumeMotionInfluence // ?  不运行？
 			if (mi !== null) {
 				motionInfluences += mi
 			}
@@ -363,8 +363,8 @@ abstract class AbstractEnvironment implements Environment {
 				otherInfluences += i
 			}
 		}
-
-		if (!motionInfluences.isEmpty || !otherInfluences.isEmpty) {
+// ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+		if (!motionInfluences.isEmpty || !otherInfluences.isEmpty) { // 如果  influence 不是空的才会运行，空的就不会运行了
 			applyInfluences(
 					motionInfluences,
 					otherInfluences,
