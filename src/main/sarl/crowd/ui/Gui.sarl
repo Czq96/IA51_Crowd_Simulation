@@ -19,7 +19,7 @@ import javax.swing.JComponent
 import javax.swing.JPanel
 import javax.swing.JSlider
 
-public class Gui extends AbstractFrameworkGUI {
+class Gui extends AbstractFrameworkGUI {
 
 	static val DIRECTION_RADIUS = 30f  // ICON的大小
 	
@@ -50,7 +50,11 @@ public class Gui extends AbstractFrameworkGUI {
 
 	static var BOMB_ICON : Icon
 	static var BOMB_ICON_WIDTH : int
-	static var BOMB_ICON_HEIGHT : int  
+	static var BOMB_ICON_HEIGHT : int
+	
+	static var EXPLODED_PLACE_ICON : Icon
+	static var EXPLODED_PLACE_ICON_WIDTH : int
+	static var EXPLODED_PLACE_ICON_HEIGHT : int  
 
 	static val FAKE = {
 		var url = Resources.getResource(typeof(Gui), "visitor.png") // $NON-NLS-1$
@@ -99,8 +103,13 @@ public class Gui extends AbstractFrameworkGUI {
 		BOMB_ICON = new ImageIcon(url)
 		BOMB_ICON_WIDTH = BOMB_ICON.iconWidth
 		BOMB_ICON_HEIGHT = BOMB_ICON.iconHeight
-		null
 
+		url = Resources.getResource(typeof(Gui), "exploded.png")
+		assert url !== null  
+		EXPLODED_PLACE_ICON = new ImageIcon(url)
+		EXPLODED_PLACE_ICON_WIDTH = BOMB_ICON.iconWidth
+		EXPLODED_PLACE_ICON_HEIGHT = BOMB_ICON.iconHeight
+		
 	}
 
 	// create a BottomPanel for simulate control
@@ -176,6 +185,8 @@ public class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
+
+// TODO: 一下所有的都重复了，可以删掉写一个总的，使用 switch 或者是  if 来 判断画图
 	override paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
 		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
 		var bounds = shape.bounds
@@ -293,6 +304,30 @@ public class Gui extends AbstractFrameworkGUI {
 
 		} else {
 			orientationOnScreen.scale(DIRECTION_RADIUS)
+			g2d.fill(shape)
+		}
+		if (this.showPositions.selected) {
+			var oldFont = g2d.font
+			var f = oldFont.deriveFont(6)
+			g2d.color = g2d.background.darker
+			g2d.font = f
+			var fmt = new DecimalFormat("#.#")
+			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
+				bounds.maxX as float + 2, bounds.maxY as float + 2)
+			g2d.font = oldFont
+		}
+	}
+
+	override paintExplodedPlace(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
+		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+			// TODO : 画出危险区域的红圈
+		var bounds = shape.bounds
+		g2d.color = Color::BLUE
+		if (this.showIcons.selected) {
+			paintObstacleIcon(g2d, EXPLODED_PLACE_ICON, positionOnScreen, orientationOnScreen)
+
+		} else {
+			orientationOnScreen.scale(DIRECTION_RADIUS)
 
 			/* g2d.draw(
 			 * new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
@@ -354,8 +389,9 @@ public class Gui extends AbstractFrameworkGUI {
 		}*/
 		icon.paintIcon(this, g2d, position.x as int - SHOP_ICON_WIDTH / 2, position.y as int - SHOP_ICON_HEIGHT / 2);
 	}
-
-	// 用来画  商店  的图像和方向
+	
+	
+// 用来画  商店  的图像和方向
 	
 	
 	

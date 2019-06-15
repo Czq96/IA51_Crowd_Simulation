@@ -37,6 +37,7 @@ import java.util.Map
 import java.util.TreeMap
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
+import environment.ExploitationPlace
 
 /**
  * Abstract implementation of a situated environment.  
@@ -52,6 +53,8 @@ abstract class AbstractEnvironment implements Environment {
 	var wallBodyList : Map<UUID, WallBody> = new TreeMap
 	var exitBodyList : Map<UUID, ExitBody> = new TreeMap
 	var entranceBodyList : Map<UUID, EntranceBody> = new TreeMap
+	// ExpoitationPlaceNumber
+	var exploitationPlaceList : Map<UUID, ExploitationPlace> = new TreeMap
 	val timeManager : TimeManager
 	val width : float
 	val height : float
@@ -200,7 +203,28 @@ abstract class AbstractEnvironment implements Environment {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");
 		}
 	}
-	
+
+	protected synchronized def addExpoitationPlace(body : ExploitationPlace, position : Point2f, direction : float) {
+		if (this.init.get) {
+			synchronized (this.exploitationPlaceList) {
+				this.exploitationPlaceList.put(body.ID, body)
+			}
+			body.position = position
+			body.angle = direction
+			body.onExploitationPlaceCreated
+		} else {
+			throw new IllegalStateException("You cannot call this function after the start of the simulation");
+		}
+	}
+
+	protected synchronized def addExploitationPlace(body : ExploitationPlace, position : Point2f, direction : float) {
+		synchronized (this.exploitationPlaceList) {
+			this.exploitationPlaceList.put(body.ID, body)
+		}
+		body.position = position
+		body.angle = direction
+		body.onExploitationPlaceCreated
+	}
 	
 	/** Invoked when an shop body is created.
 	 * 
@@ -230,6 +254,8 @@ abstract class AbstractEnvironment implements Environment {
 	protected abstract def onExitBodyCreated(body : ExitBody)
 
 	protected abstract def onEntranceBodyCreated(body : EntranceBody)
+
+	protected abstract def onExploitationPlaceCreated(body : ExploitationPlace)
 	
 	protected abstract def onAgentBodyDestroyed(body : AgentBody)
 
@@ -278,6 +304,13 @@ abstract class AbstractEnvironment implements Environment {
 			return Collections.unmodifiableCollection(this.entranceBodyList.values)
 		}
 	}
+
+	def getExploitationPlaces : Iterable<ExploitationPlace> {
+		synchronized (this.exploitationPlaceList) {
+			return Collections.unmodifiableCollection(this.exploitationPlaceList.values)
+		}
+	}
+	 
 	override getAgentBodyNumber : int {
 		synchronized (this.agentBodyList) {
 			return this.agentBodyList.size
@@ -308,6 +341,13 @@ abstract class AbstractEnvironment implements Environment {
 			return this.entranceBodyList.size
 		}
 	}
+
+	def getExploitationPlaceNumber : int {
+		synchronized (this.exploitationPlaceList) {
+			return this.exploitationPlaceList.size
+		}
+	}
+	
 	override getAgentBodyFor(agentId : UUID) : AgentBody {
 		synchronized (this.agentBodyList) {
 			return this.agentBodyList.get(agentId)

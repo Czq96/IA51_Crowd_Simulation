@@ -38,6 +38,10 @@ class FrameworkMouseAdapter extends MouseAdapter {
 		this.parent = new WeakReference(g)
 	}
 
+	override mouseClicked(e : MouseEvent) {
+		this.parent.get.mouseClickedTargetOnScreen = new Point2f(e.x, e.y)
+	}
+	
 	override mouseDragged(e : MouseEvent) {
 		this.parent.get.mouseTargetOnScreen = new Point2f(e.x, e.y)
 	}

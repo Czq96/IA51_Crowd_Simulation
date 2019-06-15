@@ -208,6 +208,19 @@ abstract class AbstractFrameworkGUI extends JFrame implements FrameworkGUI {
 		}
 	}
 
+	override setMouseClickedTargetOnScreen(screenPosition : Point2f) {
+		synchronized (treeLock) {
+			var masPosition = screenPosition.screen2mas
+			if (this.environment !== null) {
+				this.environment.mouseClickedTarget = masPosition
+			}
+			this.message = if (masPosition === null)
+				null
+			else
+				MessageFormat::format("Exploded place: ({0,number,#.#}; {1,number,#.#})", masPosition.x, masPosition.y)
+		}
+	}
+
 	/**
 	 * @param masPosition the position of the target in the MAS
 	 */

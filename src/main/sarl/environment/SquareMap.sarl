@@ -33,6 +33,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	static val VISITOR_SIZE = 20f // TODO: change to image
 	static val SHOP_SIZE = 20f // TODO: change to image
+	static val DANDER_RADIUS = 40f // TODO: change to image
 	
 	var churchBodyList = new ArrayList<ChurchBody> 
 	var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
@@ -40,6 +41,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	var exitBodyList = new ArrayList<ExitBody> 
 	var wallBodyList = new ArrayList<WallBody>
 	var entranceBodyList = new ArrayList<EntranceBody>
+	var exploitationPlaceList = new ArrayList<ExploitationPlace>
 	var mouseTarget : MouseTarget
 
 	
@@ -158,6 +160,25 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	}
 
+	def createExploitation(positionOnScreen : Point2f) {
+		var id = UUID::randomUUID
+		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
+		var body = new ExploitationPlace(
+			id, 
+			new Circle2f(0f, 0f, SHOP_SIZE), // body
+			5f, // max linear speed m/s
+			0.5f, // max linear acceleration (m/s)/s
+			MathUtil.PI / 4f, // max angular speed r/s
+			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+			frustum,
+			DANDER_RADIUS)
+		body.name = MessageFormat::format("Exploitation #{0}", this.exploitationPlaceNumber + 1)
+		addExploitationPlace(
+			body, 
+			positionOnScreen, // real position
+			Math::random as float * MathUtil.TWO_PI)
+		}
+
 	protected def randomPosition : Point2f {
 		var x = Math::random as float * this.width - VISITOR_SIZE
 		var y = Math.random() as float * this.height - VISITOR_SIZE
@@ -187,6 +208,11 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	protected def onEntranceBodyCreated(body : EntranceBody) {
 		this.entranceBodyList.add(body)
 	}
+
+	protected def onExploitationPlaceCreated(body : ExploitationPlace) {
+		this.exploitationPlaceList.add(body)
+	}
+	
 	protected def onAgentBodyDestroyed(body : AgentBody) {
 		throw new UnsupportedOperationException("TODO: onAgentBodyDestroyed")
 	}
@@ -297,21 +323,23 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	
 	def getAllObjects : Iterable<? extends SituatedObject> {	
 		if (this.mouseTarget !== null) {
-			return CollectionUtil.newIterable(this.agentBodies + this.shopBodies + this.churchBodies+this.wallBodies+this.exitBodies+this.entranceBodies, this.mouseTarget)
+			return CollectionUtil.newIterable(this.agentBodies + this.shopBodies + this.churchBodies +
+				this.wallBodies+this.exitBodies+this.entranceBodies + this.exploitationPlaceList, this.mouseTarget
+			)
 		}
-		return this.agentBodies + this.shopBodies + this.churchBodies + this.wallBodies + this.exitBodies +
-			this.entranceBodies
+		return this.agentBodies + this.shopBodies + this.churchBodies + this.wallBodies +
+			this.exploitationPlaceList + this.exitBodies + this.entranceBodies
 	}
 
+//  这个是鼠标越过的 时候
 	override setMouseTarget(target : Point2f) {
-		if (target === null) {
-			var r = randomPosition
-			this.mouseTarget = new MouseTarget(r.x, r.y)  
-		}
-		else 
-			this.mouseTarget = new MouseTarget(target.x, target.y)
+		this.mouseTarget = new MouseTarget(target.x, target.y)
+		//this.createExploitation(target)
 	}
-	
+
+	override setMouseClickedTarget(target : Point2f) {
+		this.createExploitation(target)
+	}
 	
 	private static class AnimatAction {
 
@@ -356,5 +384,5 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	}
 	
-	
+
 }

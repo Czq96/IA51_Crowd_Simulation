@@ -36,6 +36,7 @@ import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
 import java.lang.ref.WeakReference
 import javax.swing.JPanel
+import environment.ExploitationPlace
 
 /** Graphical panel for displaying the world.
  *
@@ -157,7 +158,13 @@ class WorldPanel extends JPanel {
 				this.window.paintEntranceBody(g2d, positionOnScreen, directionOnScreen, awtShape, o.type, o.name,
 					o.position, this.window.mas2screen(frustumShape))
 
-			}
+			} // paintExplodedPlace
+			else if (o instanceof ExploitationPlace) {
+				var frustum = o.frustum
+				var frustumShape = frustum?.toShape(o.position, o.direction)
+				this.window.paintExplodedPlace(g2d, positionOnScreen, directionOnScreen, awtShape, o.type, o.name,
+					o.position, this.window.mas2screen(frustumShape))
+			} 
 			else {
 				this.window.paintSituatedObject(
 					g2d,

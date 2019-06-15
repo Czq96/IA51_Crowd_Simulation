@@ -35,8 +35,11 @@ interface WorldModelStateProvider {
 	/** Set the mouse target.
 	 * 
 	 * @param target
-	 */
+		 */
+// explotion
+	def setMouseClickedTarget(target : Point2f)
 	def setMouseTarget(target : Point2f)
+
 
 	/** Replies the width of the environment.
 	 * 
