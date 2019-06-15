@@ -45,7 +45,9 @@ abstract class Shape2f<S extends Shape2f<S>> implements Serializable, Cloneable 
 	 * @param r - the rectangle.
 	 * @return <code>true</code> if an intersection exists.
 	 */
-	abstract def intersects(r : Shape2f<?>) : boolean 
+	abstract def intersects(r : Shape2f<?>) : boolean
+
+	abstract def intersects(s : Point2f) : boolean
 
 	/** Create a clone of this shape with a translation.
 	 * 

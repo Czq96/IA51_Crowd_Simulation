@@ -171,5 +171,9 @@ class Rectangle2f extends Shape2f<Rectangle2f> {
 	override getMaxDemiSize : float {
 		max(width, height) / 2f
 	}
-
+	
+	def intersects(s : Point2f) : boolean {
+		throw new UnsupportedOperationException("TODO: auto-generated method stub")
+	}
+	
 }

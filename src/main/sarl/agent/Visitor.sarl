@@ -24,15 +24,17 @@ import fr.utbm.info.ia51.framework.math.Vector2f
  * @author c
  * 
  */
+@SuppressWarnings("discouraged_occurrence_readonly_use")
 agent Visitor extends AbstractAnimat {
 
 	// 差集
   // list1.removeAll(list2);
 	var seekBehaviour : SeekAlgorithm
 	var wanderBehaviour : WanderAlgorithm
+	
 	var visitedShop = new ArrayList<Percept>
 	var currentTargetPosition = new Point2f
-	var currentTargetShopVistedOrNot = true
+	var currentTargetVistedOrNot = true
 
 	val STOP_RADIUS = MathUtil.PI / 10f
 	val SLOW_RADIUS = MathUtil.PI / 4f
@@ -57,14 +59,16 @@ agent Visitor extends AbstractAnimat {
 		var allShops = Lists.newArrayList(
 			percepts.filter[it.type == "environment.ShopBody"]
 		)
-		if (currentTargetShopVistedOrNot) // 如果这个商店 去过了 那就换一家店
+		if (this.currentTargetVistedOrNot) 
 		{
+			// 如果都去过了那就回家
 			if (this.visitedShop.size() == allShops.size()) {
 				var targets = percepts.filter[it.type == "environment.ExitBody"]
 				currentTargetPosition = targets.get(0).position.clone
-				currentTargetShopVistedOrNot = false
+				currentTargetVistedOrNot = false
 				return targets.get(0).position
 			}
+			// 如果这个商店 去过了 那就换一家店
 			else {
 				allShops.removeAll(this.visitedShop)
 				var targetShop = allShops.get(
@@ -72,17 +76,33 @@ agent Visitor extends AbstractAnimat {
 				)
 				this.visitedShop.add(targetShop)
 				currentTargetPosition = targetShop.position.clone
-				currentTargetShopVistedOrNot = false
+				currentTargetVistedOrNot = false
 				return targetShop.position
 			}
 		}
 		else{
+			//如果还没到想去的地方
 			return this.currentTargetPosition		
 		}
 	}
 	
-
+//	def targetPositionReachDection(s : ): boolean
+//	{// 目前是判断自己的身体部分有没有接触到这个点     圣体是一个圆
+//		
+//		var x = occurrence.body.shape.center.x - currentTargetPosition.x
+//		var y = occurrence.body.shape.center.y - currentTargetPosition.y
+//		
+//		return ((x * x + y * y) < (occurrence.body.shape.radius * occurrence.body.shape.radius))
+//	}
+//	
 	on PerceptionEvent {
+		//判断是否到达想去的地方
+		// 
+		// if (currentTargetPosition == occurrence.body.position)
+		if (occurrence.body.shape.intersects(currentTargetPosition))
+		{
+			this.currentTargetVistedOrNot = true
+		}
 		
 		var target = occurrence.perceptions.extractTarget
 //1. 判断有无危险

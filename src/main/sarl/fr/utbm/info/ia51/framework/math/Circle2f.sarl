@@ -94,6 +94,12 @@ class Circle2f extends Shape2f<Circle2f> {
 	 * @param s - the shape.
 	 * @return <code>true</code> if an intersection exists.
 	 */
+	def intersects(s : Point2f) : boolean {
+		var x = s.x - this.center.x
+		var y = s.y - this.center.y
+		return ((x * x) + (y * y)) < (this.radius  * this.radius )
+	}
+	
 	def intersects(s : Shape2f<?>) : boolean {
 		if (s instanceof Circle2f) {
 			var x = s.center.x - this.center.x

@@ -77,7 +77,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		var body = new AgentBody(
 			id,
 			new Circle2f(0f, 0f, VISITOR_SIZE), // body
-			1.0f, // max linear speed m/s
+			5.0f, // max linear speed m/s
 			0.5f, // max linear acceleration (m/s)/s
 			MathUtil.PI / 4f, // max angular speed r/s
 			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
@@ -203,6 +203,9 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		{
 			allPercepts.add(new Percept(i))
 		}
+		
+		// 返回自己的信息           在  visitor 里面 使用  occurence 来返回自己的信息
+		//allPercepts.add(new Percept(^agent))
 		
 		return allPercepts
 		
