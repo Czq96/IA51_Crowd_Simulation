@@ -63,10 +63,12 @@ agent Visitor extends AbstractAnimat {
 		{
 			// 如果都去过了那就回家
 			if (this.visitedShop.size() == allShops.size()) {
-				var targets = percepts.filter[it.type == "environment.ExitBody"]
-				currentTargetPosition = targets.get(0).position.clone
+				var targetExits = percepts.filter[it.type == "environment.ExitBody"]
+				var targetExit = targetExits.get(
+					(Math.random() * targetExits.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
+				)
 				currentTargetVistedOrNot = false
-				return targets.get(0).position
+				return currentTargetPosition = targetExit.position.clone
 			}
 			// 如果这个商店 去过了 那就换一家店
 			else {
@@ -94,15 +96,14 @@ agent Visitor extends AbstractAnimat {
 //		
 //		return ((x * x + y * y) < (occurrence.body.shape.radius * occurrence.body.shape.radius))
 //	}
-//	
+
 	on PerceptionEvent {
-		//判断是否到达想去的地方
-		// 
-		// if (currentTargetPosition == occurrence.body.position)
+		// 判断想去的那个点  是否接触到自己的身体   ， 接触到了才算到达
 		if (occurrence.body.shape.intersects(currentTargetPosition))
 		{
 			this.currentTargetVistedOrNot = true
 		}
+		//TODO: 判断到达出口后agent死亡
 		
 		var target = occurrence.perceptions.extractTarget
 //1. 判断有无危险
