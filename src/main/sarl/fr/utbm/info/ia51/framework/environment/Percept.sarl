@@ -84,7 +84,7 @@ class Percept implements MobileObject, Serializable {
 			this.bodyId = null
 		}
 	}
-	
+
 	override clone : Percept {
 		var clone = super.clone as Percept
 		clone.currentLinearMotion = this.currentLinearMotion.clone

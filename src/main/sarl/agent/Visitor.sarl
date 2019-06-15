@@ -13,6 +13,12 @@ import fr.utbm.info.ia51.general.motionalgo.SteeringWanderAlgorithm
 import fr.utbm.info.ia51.general.motionalgo.WanderAlgorithm
 import io.sarl.core.Initialize
 import java.util.List
+import java.util.ArrayList
+import com.google.common.collect.Lists;
+
+import fr.utbm.info.ia51.framework.math.Point2f
+import fr.utbm.info.ia51.framework.math.Shape2f
+import fr.utbm.info.ia51.framework.math.Vector2f
 
 /** 
  * @author c
@@ -20,8 +26,13 @@ import java.util.List
  */
 agent Visitor extends AbstractAnimat {
 
+	// 差集
+  // list1.removeAll(list2);
 	var seekBehaviour : SeekAlgorithm
 	var wanderBehaviour : WanderAlgorithm
+	var visitedShop = new ArrayList<Percept>
+	var currentTargetPosition = new Point2f
+	var currentTargetShopVistedOrNot = true
 
 	val STOP_RADIUS = MathUtil.PI / 10f
 	val SLOW_RADIUS = MathUtil.PI / 4f
@@ -42,25 +53,48 @@ agent Visitor extends AbstractAnimat {
 		}
 	}
 
-	def extractTarget(percepts : List<Percept>) : Percept {
-		var targets = percepts.filter[it.type == "TARGET"]
-		if (targets.empty) {
-			null
-		} else {
-			targets.get(0)
+	def extractTarget(percepts : List<Percept>) : Point2f { // class Percept implements MobileObject,
+		var allShops = Lists.newArrayList(
+			percepts.filter[it.type == "environment.ShopBody"]
+		)
+		if (currentTargetShopVistedOrNot) // 如果这个商店 去过了 那就换一家店
+		{
+			if (this.visitedShop.size() == allShops.size()) {
+				var targets = percepts.filter[it.type == "environment.ExitBody"]
+				currentTargetPosition = targets.get(0).position.clone
+				currentTargetShopVistedOrNot = false
+				return targets.get(0).position
+			}
+			else {
+				allShops.removeAll(this.visitedShop)
+				var targetShop = allShops.get(
+					(Math.random() * allShops.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
+				)
+				this.visitedShop.add(targetShop)
+				currentTargetPosition = targetShop.position.clone
+				currentTargetShopVistedOrNot = false
+				return targetShop.position
+			}
+		}
+		else{
+			return this.currentTargetPosition		
 		}
 	}
+	
 
 	on PerceptionEvent {
+		
 		var target = occurrence.perceptions.extractTarget
-
+//1. 判断有无危险
+//2. 判断会不会撞到  会的话就减速
+//3. 
 		if (target !== null) {
 			// run the seek behaviour
 			this.seekBehaviour.run(
 				occurrence.body.position,
 				occurrence.body.currentLinearSpeed,
 				occurrence.body.maxLinear,
-				target.position
+				target
 			).emitInfluence 
 			// emitInfluenct 用来计算influence
 		} else {
@@ -77,8 +111,15 @@ agent Visitor extends AbstractAnimat {
 		}
 	}
 	
-	on collisionDected{
-		
-	}
+//	on collisionDected{
+//		
+	//	}
+
+	//	on collisionDected{
+	//
+	//	}
+
+
+
 
 }

@@ -42,6 +42,7 @@ abstract class AbstractSituatedObject implements SituatedObject, Serializable {
 	var shape : Shape2f<?> 
 	var name : String 
 	var type : Serializable 
+	val typeName : String // TODO : 用这个来更简单地代替  type 地名字  比如  agent 
 	
 	/**
 	 * @param id the identifier of the object.
@@ -52,6 +53,7 @@ abstract class AbstractSituatedObject implements SituatedObject, Serializable {
 		assert id !== null
 		this.id = id
 		this.shape = shape
+		this.typeName = null
 		if (position !== null) {
 			this.position.set(position)
 		}
@@ -64,6 +66,7 @@ abstract class AbstractSituatedObject implements SituatedObject, Serializable {
 	 */
 	new (id : UUID, shape : Shape2f<?>, x : float, y : float) {
 		assert id !== null
+		this.typeName = null
 		this.id = id
 		this.shape = shape
 		this.position.set(x, y)

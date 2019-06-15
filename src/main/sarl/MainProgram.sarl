@@ -31,9 +31,6 @@ agent SimulationLauncher extends FrameworkLauncher {
 		
 		environment.createChurch
 		
-		for (i : 1 .. NUMBER_VISITOR) {
-			environment.createVisitor
-		}
 		for (i : 1 .. NUMBER_SHOP) {
 			environment.createShop(mapData.shopPositionList.get(i - 1))
 		}
@@ -46,8 +43,9 @@ agent SimulationLauncher extends FrameworkLauncher {
 		for (i : 1 .. NUMBER_ENTRANCE) {
 			environment.createEntrance(mapData.entrancePositionList.get(i - 1))
 		}
-		
-		
+		for (i : 1 .. NUMBER_VISITOR) {
+				environment.createVisitor
+		}
 		
 		var gui = new Gui(WORLD_SIZE_X, WORLD_SIZE_Y, environment.timeManager)
 		

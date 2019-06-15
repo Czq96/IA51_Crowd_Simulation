@@ -24,7 +24,7 @@ class ShopBody extends AbstractMobileObject implements Body {
 		super(id, shape, maxLinearSpeed, maxLinearAcceleration, maxAngularSpeed, maxAngularAcceleration)
 		assert frustum === null || id == frustum.owner
 		this.frustum = frustum
-		this.type = "BODY"
+		this.type = "SHOP"
 	}
 
 	def getFrustum : Frustum {

@@ -23,6 +23,8 @@ import java.util.Collection
 import java.util.List
 import java.util.UUID
 
+import com.google.common.collect.Lists;
+
 /** 
  * Model of the world.
  *   
@@ -75,15 +77,18 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		var body = new AgentBody(
 			id,
 			new Circle2f(0f, 0f, VISITOR_SIZE), // body
-			0.5f, // max linear speed m/s
+			1.0f, // max linear speed m/s
 			0.5f, // max linear acceleration (m/s)/s
 			MathUtil.PI / 4f, // max angular speed r/s
 			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
 			frustum)
 		body.name = MessageFormat::format("Visitor #{0}", this.agentBodyNumber + 1)
+		var entre = this.entranceBodyList.get(
+			(Math.random() * entranceBodyList.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
+		)
 		addAgentBody(
-			body, 
-			randomPosition,// TODO: 初始化的地址要在公园的入口
+			body,
+			entre.position,
 			Math::random as float * MathUtil.TWO_PI)
 	}
 
@@ -191,9 +196,26 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		emptyList
 	}
 	
-	protected def computePerceptionsFor(^agent : AgentBody) : List<Percept> {
+	protected def computePerceptionsFor(^agent : AgentBody) : List<Percept> { // TODO: 根据人的视野来计算    情况
 		var allPercepts = new ArrayList<Percept>
+		var allCanMoveInObj = Lists.newArrayList(getAllCanMoveInObjects)
+		for(i:allCanMoveInObj)
+		{
+			allPercepts.add(new Percept(i))
+		}
+		
 		return allPercepts
+		
+		/**
+	 * var churchBodyList = new ArrayList<ChurchBody> 
+	 * var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
+	 * var shopBodyList = new ArrayList<ShopBody>  
+	 * var exitBodyList = new ArrayList<ExitBody> 
+	 * var wallBodyList = new ArrayList<WallBody>
+	 * var entranceBodyList = new ArrayList<EntranceBody>
+	 * var mouseTarget : MouseTarget
+	 * 
+		 */
 		// 添加是否撞到
 	}
 	
@@ -239,14 +261,13 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	private def trivialCollisionDetection(index1 : int, influenceList : List<MotionInfluence>, body1Bounds : Shape2f<?>,
 		move : Vector2f) {
 			//判断有无和房子什么的相撞  有的话就不走
-		var cantMoveInObj = getAllCantMoveInObjects()
+		var cantMoveInObj = getAllAvoidCollitionObjects()
 		for (obj : cantMoveInObj)
 		{
 			val body2Bounds = obj.shape
 			if (body1Bounds.intersects(body2Bounds)) { // intersects  是  circle 中用判断是否相撞的函数
-				move.set(0, 0)  //一旦撞到就会停止走路   只有判断有无撞到 没有判断撞到后怎么办
-				//1.  这里要给 agent 发送碰撞？ 
-				//2. 直接an'gen't 中加入函数避免碰撞 
+				//move.set(0, 0)  //一旦撞到就会停止走路   只有判断有无撞到 没有判断撞到后怎么办
+				//1.  这里要给 agent 发送碰撞？  
  			}
 		}
 		for (index2 : (index1 + 1) ..< influenceList.size) {
@@ -262,13 +283,13 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		}
 	}
 
-	def getAllCantMoveInObjects : Iterable<? extends SituatedObject> {
-		return this.shopBodies + this.wallBodies 		//+ this.churchBodies
+	def getAllAvoidCollitionObjects : Iterable<? extends SituatedObject> { // 改成 cant 碰撞 的物体
+		return this.wallBodies + this.agentBodies 	// + this.agentBodies + this.churchBodies
 	}
 
 //TODO :进如这些地方后会隐藏人物
-	def getAllMoveInObjects : Iterable<? extends SituatedObject> {
-		return this.churchBodies + this.exitBodies + this.entranceBodies 	// + this.shopBodies
+	def getAllCanMoveInObjects : Iterable<? extends SituatedObject> {
+		return this.churchBodies + this.exitBodies + this.entranceBodies + this.shopBodies 	// + this.shopBodies
 	}
 	
 	def getAllObjects : Iterable<? extends SituatedObject> {	

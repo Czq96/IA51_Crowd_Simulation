@@ -40,10 +40,11 @@ abstract class AbstractMobileObject extends AbstractSituatedObject implements Mo
 	val maxLinearAcceleration : float
 	val maxAngularSpeed : float
 	val maxAngularAcceleration : float
-	
+
 	var angle = 0f
 	var currentAngularSpeed = 0f
 	var linearMove = new Vector2f
+	
 
 	/**
 	 * @param id the identifier of the object.
@@ -55,6 +56,7 @@ abstract class AbstractMobileObject extends AbstractSituatedObject implements Mo
 	 */
 	new (id : UUID, shape : Shape2f<?>, maxLinearSpeed : float, maxLinearAcceleration : float, maxAngularSpeed : float,
 		maxAngularAcceleration : float) {
+			
 		super(id, shape)
 		this.maxLinearSpeed = maxLinearSpeed.abs
 		this.maxLinearAcceleration = maxLinearAcceleration.abs

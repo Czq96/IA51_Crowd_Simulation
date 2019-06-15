@@ -380,7 +380,7 @@ abstract class AbstractEnvironment implements Environment {
 		var list : List<Percept> 
 		for(body : bodies) {
 			list = body.computePerceptionsFor
-			body.setPerceptions(list ?: emptyList)
+			body.setPerceptions(list ?: emptyList)   // 给人所有的物体的映像     TODO: 视野的问题
 		}
 	}
 
