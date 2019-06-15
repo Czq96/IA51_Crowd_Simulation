@@ -73,7 +73,7 @@ agent AbstractAnimat {
 	def getMaxAngular(p : Percept) : float {
 		if (this.behaviorType == DynamicType::STEERING) p.maxAngularAcceleration else p.maxAngularSpeed
 	}
-
+//    	所以有的influence类型
 	def emitInfluence(output : MotionAlgorithmOutput, influences : Influence*) {
 		if (output !== null) {
 			if (output.getType() === DynamicType::STEERING)

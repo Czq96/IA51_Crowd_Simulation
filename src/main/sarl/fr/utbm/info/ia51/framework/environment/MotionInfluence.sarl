@@ -31,6 +31,7 @@ import fr.utbm.info.ia51.framework.math.Vector2f
  * @author St&eacute;phane GALLAND &lt;stephane.galland@utbm.fr&gt;
  * @version $Name$ $Revision$ $Date$
  */
+ //  就是接下来往哪里走， 走多少或者转多少角度
 class MotionInfluence extends Influence {
 
 	val type : DynamicType 

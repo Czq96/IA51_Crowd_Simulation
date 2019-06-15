@@ -30,7 +30,7 @@ import java.util.UUID
 class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	static val VISITOR_SIZE = 20f // TODO: change to image
-	static val SHOP_SIZE = 30f // TODO: change to image
+	static val SHOP_SIZE = 20f // TODO: change to image
 	
 	var churchBodyList = new ArrayList<ChurchBody> 
 	var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
@@ -75,7 +75,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		var body = new AgentBody(
 			id,
 			new Circle2f(0f, 0f, VISITOR_SIZE), // body
-			5f, // max linear speed m/s
+			0.5f, // max linear speed m/s
 			0.5f, // max linear acceleration (m/s)/s
 			MathUtil.PI / 4f, // max angular speed r/s
 			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
@@ -267,17 +267,36 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	private def trivialCollisionDetection(index1 : int, influenceList : List<MotionInfluence>, body1Bounds : Shape2f<?>,
 		move : Vector2f) {
+			//判断有无和房子什么的相撞  有的话就不走
+		var cantMoveInObj = getAllCantMoveInObjects()
+		for (obj : cantMoveInObj)
+		{
+			val body2Bounds = obj.shape
+			if (body1Bounds.intersects(body2Bounds)) { // intersects  是  circle 中用判断是否相撞的函数
+				move.set(0, 0)  //一旦撞到就会停止走路   只有判断有无撞到 没有判断撞到后怎么办
+				// 这里要给 agent 发送信息     然后 behavior 避免撞到
+ 			}
+		}
 		for (index2 : (index1 + 1) ..< influenceList.size) {
-			var inf2 = influenceList.get(index2)
-			var body2 = getAgentBodyFor(inf2.emitter)
+			var inf2 = influenceList.get(index2) // 获取下一个influence
+			var body2 = getAgentBodyFor(inf2.emitter) // 获取influence的执行者
 			if (body2 !== null) {
 				val body2Bounds = body2.shape
-				if (body1Bounds.intersects(body2Bounds)) {
+				if (body1Bounds.intersects(body2Bounds)) { // intersects  是  circle 中用判断是否相撞的函数
 					move.set(0, 0)
 					return
 				}
 			}
 		}
+	}
+
+	def getAllCantMoveInObjects : Iterable<? extends SituatedObject> {
+		return this.shopBodies + this.wallBodies 		//+ this.churchBodies
+	}
+
+//TODO :进如这些地方后会隐藏人物
+	def getAllMoveInObjects : Iterable<? extends SituatedObject> {
+		return this.churchBodies + this.exitBodies + this.entranceBodies 	// + this.shopBodies
 	}
 	
 	def getAllObjects : Iterable<? extends SituatedObject> {	
