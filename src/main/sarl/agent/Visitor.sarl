@@ -76,5 +76,9 @@ agent Visitor extends AbstractAnimat {
 			).emitInfluence
 		}
 	}
+	
+	on collisionDected{
+		
+	}
 
 }

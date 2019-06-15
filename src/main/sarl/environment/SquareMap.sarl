@@ -194,38 +194,9 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 	protected def computePerceptionsFor(^agent : AgentBody) : List<Percept> {
 		var allPercepts = new ArrayList<Percept>
 		return allPercepts
+		// 添加是否撞到
 	}
 	
-//	protected def applyInfluences(motionInfluences : Collection<MotionInfluence>,
-//		otherInfluences : Collection<Influence>, timeManager : TimeManager) {
-//		var actions = new ArrayList<AnimatAction>(motionInfluences.size());
-//		for (index1 : 0 ..< motionInfluences.size) {
-//			var inf1 = motionInfluences.get(index1)
-//			var body1 = getAgentBodyFor(inf1.emitter)
-//			var move : Vector2f
-//			var rotation : float
-//			if (inf1.type === DynamicType.STEERING) {
-//				move = body1.computeSteeringTranslation(inf1.linearInfluence, timeManager)
-//				rotation = body1.computeSteeringRotation(inf1.angularInfluence, timeManager)
-//			} else {
-//				move = body1.computeKinematicTranslation(inf1.linearInfluence, timeManager)
-//				rotation = body1.computeKinematicRotation(inf1.angularInfluence, timeManager)
-//			}
-//
-//			actions += new AnimatAction(body1, move, rotation)
-//
-//		}
-//
-//		// Apply the actions
-//		for (action : actions) {
-//			var body = action.objectToMove
-//			if (body !== null) {
-//				body.move(action.translation, action.rotation)
-//			}
-//		}
-//	
-//	}
-
 	override applyInfluences(motionInfluences : Collection<MotionInfluence>, otherInfluences : Collection<Influence>,
 		timeManager : TimeManager) {
 		var influenceList = new ArrayList<MotionInfluence>(motionInfluences)
@@ -274,7 +245,8 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			val body2Bounds = obj.shape
 			if (body1Bounds.intersects(body2Bounds)) { // intersects  是  circle 中用判断是否相撞的函数
 				move.set(0, 0)  //一旦撞到就会停止走路   只有判断有无撞到 没有判断撞到后怎么办
-				// 这里要给 agent 发送信息     然后 behavior 避免撞到
+				//1.  这里要给 agent 发送碰撞？ 
+				//2. 直接an'gen't 中加入函数避免碰撞 
  			}
 		}
 		for (index2 : (index1 + 1) ..< influenceList.size) {
