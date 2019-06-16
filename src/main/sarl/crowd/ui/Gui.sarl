@@ -321,26 +321,30 @@ class Gui extends AbstractFrameworkGUI {
 
 	override paintExplodedPlace(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
 		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape, danger : float) {
-			// TODO : 画出危险区域的红圈
+			
 		var bounds = shape.bounds
-		g2d.color = Color::BLUE
+		//
+		g2d.color = Color::RED
+		var alpha = 0.1f;
+		var alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+		g2d.setComposite(alcom);
+		// 画出淡红色的危险区域
+		g2d.fillOval(
+			(positionOnScreen.x - danger).intValue,
+			(positionOnScreen.y - danger).intValue,
+			(danger * 2).intValue,
+			(danger * 2).intValue
+		)
+		//画出明显的boom图标
+		alpha = 1.0f;
+		alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+		g2d.setComposite(alcom);
 		if (this.showIcons.selected) {
 			paintObstacleIcon(g2d, EXPLODED_PLACE_ICON, positionOnScreen, orientationOnScreen)			
 		} else {
 			orientationOnScreen.scale(DIRECTION_RADIUS)
 			g2d.fill(shape)
 		}
-		var alpha = 0.1f;
-		var alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
-		g2d.setComposite(alcom);
-		g2d.setColor(Color.red);
-		g2d.fillOval(
-			(positionOnScreen.x).intValue,
-			(positionOnScreen.y).intValue,
-			(danger*2).intValue,
-			(danger*2).intValue
-		)
-		
 		
 		if (this.showPositions.selected) {
 			var oldFont = g2d.font
