@@ -177,7 +177,6 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		//this.destory
 		}
 		
-	// TODO : 摧毁房屋/ 弄死人
 	def destoryObj(type: String, id: UUID)
 	{
 		switch(type){
@@ -189,9 +188,6 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 						removeExitBody(body)
 					}
 				}
-				
-				
-			    
 			case 'CHURCH':
 				for (var i = 0; i < churchBodyList.size; i++) {
 					if (churchBodyList.get(i).ID == id) {
@@ -224,10 +220,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 						removeAgentBody(body)
 					}
 				}
-				
 		}	
-			
-		
 	}
 	
 	
@@ -285,15 +278,9 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 						this.destoryObj("SHOP", id)
 					//case 'BODY':
 						//this.destoryObj("BODY", id)
-				
-		}	
-				//this.destoryObj(type,id)
-				
+				}	
 			}
 		}
-		
-		
-		
 		
 	}
 	
@@ -349,7 +336,9 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 				// Trivial collision detection
 				trivialCollisionDetection(index1, influenceList, body1Bounds, move)
-
+				// If anget trivial to exit, the agent will be remove
+				trivialOutDetection(body1)
+				
 				actions += new AnimatAction(body1, move, rotation)
 
 			}
@@ -360,6 +349,18 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			var body = action.objectToMove
 			if (body !== null) {
 				body.move(action.translation, action.rotation)
+			}
+		}
+	}
+
+	private def trivialOutDetection(body1 : AgentBody) {
+		//判断有无和房子什么的相撞  有的话就不走
+		var body1Bounds = body1.shape
+		var MoveOutObj = this.exitBodyList
+		for (obj : MoveOutObj) {
+			val body2Bounds = obj.shape
+			if (body1Bounds.intersects(body2Bounds)) {
+				removeAgentBody(body1)
 			}
 		}
 	}
