@@ -81,9 +81,6 @@ agent Visitor extends AbstractAnimat {
 			// 如果都去过了那就出广场
 			if (this.visitedShop.size() == allShops.size()) {
 				goOut(percepts)
-				
-				
-				
 			}
 			// 如果这个商店 去过了 那就换一家店
 			else {
@@ -126,9 +123,6 @@ agent Visitor extends AbstractAnimat {
 
 	def targetPositionReachDection(s : Shape2f): boolean
 	{
-	//	var x = occurrence.body.shape.center.x - currentTargetPosition.x
-	//	var y = occurrence.body.shape.center.y - currentTargetPosition.y
-//		return ((x * x + y * y) < (occurrence.body.shape.radius * occurrence.body.shape.radius))
 		if (s.intersects(currentTargetPosition))
 			return currentTargetVistedOrNot = true
 	}
@@ -145,7 +139,6 @@ agent Visitor extends AbstractAnimat {
 		else {
 			target = occurrence.perceptions.extractTarget	
 		}
-			//TODO: 判断到达出口后agent死亡
 		
 		if (target !== null) {
 			// run the seek behaviour
@@ -169,7 +162,6 @@ agent Visitor extends AbstractAnimat {
 			).emitInfluence
 		}
 	}
-	
 //	on collisionDected{
 //		
 	//	}
@@ -177,8 +169,4 @@ agent Visitor extends AbstractAnimat {
 	//	on collisionDected{
 	//
 	//	}
-
-
-
-
 }
