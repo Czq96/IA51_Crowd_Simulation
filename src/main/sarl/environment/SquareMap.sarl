@@ -31,9 +31,10 @@ import com.google.common.collect.Lists;
  */
 class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
-	static val VISITOR_SIZE = 20f // TODO: change to image
-	static val SHOP_SIZE = 20f // TODO: change to image
-	static val DANDER_RADIUS = 40f // TODO: change to image
+	static val VISITOR_SIZE = 20f // TODO: change to image size
+	static val SHOP_SIZE = 20f //  TODO: shop size 或者是   图片的大小需要修改
+	static val EXPLOD_SIZE = 30f //
+	static val DANDER_RADIUS = 50f //
 	
 	var churchBodyList = new ArrayList<ChurchBody> 
 	var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
@@ -161,7 +162,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 	def createExploitation(positionOnScreen : Point2f) {
 		var id = UUID::randomUUID
-		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
+		var frustum = new CircleFrustum(id, 10 * EXPLOD_SIZE)
 		var body = new ExploitationPlace(
 			id, 
 			new Circle2f(0f, 0f, SHOP_SIZE), // body
@@ -176,8 +177,17 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			body, 
 			positionOnScreen, // real position
 			Math::random as float * MathUtil.TWO_PI)
+		
+		//this.destory
 		}
-
+		
+	// TODO : 摧毁房屋/ 弄死人
+	def destoryObj()
+	{
+		
+	}
+	
+	
 	protected def randomPosition : Point2f {
 		var x = Math::random as float * this.width - VISITOR_SIZE
 		var y = Math.random() as float * this.height - VISITOR_SIZE
@@ -228,23 +238,11 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		{
 			allPercepts.add(new Percept(i))
 		}
-		
-		// 返回自己的信息           在  visitor 里面 使用  occurence 来返回自己的信息
-		//allPercepts.add(new Percept(^agent))
-		
+		for (danger : exploitationPlaceList)
+		{
+			allPercepts.add(new Percept(danger))
+		}
 		return allPercepts
-		
-		/**
-	 * var churchBodyList = new ArrayList<ChurchBody> 
-	 * var agentBodyList = new ArrayList<AgentBody> // 在AbstractEnvironment 中也有这个量，重复定义 
-	 * var shopBodyList = new ArrayList<ShopBody>  
-	 * var exitBodyList = new ArrayList<ExitBody> 
-	 * var wallBodyList = new ArrayList<WallBody>
-	 * var entranceBodyList = new ArrayList<EntranceBody>
-	 * var mouseTarget : MouseTarget
-	 * 
-		 */
-		// 添加是否撞到
 	}
 	
 	override applyInfluences(motionInfluences : Collection<MotionInfluence>, otherInfluences : Collection<Influence>,

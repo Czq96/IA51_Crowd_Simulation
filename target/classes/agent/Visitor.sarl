@@ -27,14 +27,14 @@ import fr.utbm.info.ia51.framework.math.Vector2f
 @SuppressWarnings("discouraged_occurrence_readonly_use")
 agent Visitor extends AbstractAnimat {
 
-	// 差集
-  // list1.removeAll(list2);
 	var seekBehaviour : SeekAlgorithm
 	var wanderBehaviour : WanderAlgorithm
 	
 	var visitedShop = new ArrayList<Percept>
 	var currentTargetPosition = new Point2f
 	var currentTargetVistedOrNot = true
+	var dangerous = false
+	
 
 	val STOP_RADIUS = MathUtil.PI / 10f
 	val SLOW_RADIUS = MathUtil.PI / 4f
@@ -55,20 +55,24 @@ agent Visitor extends AbstractAnimat {
 		}
 	}
 
+	def goOut(percepts : List<Percept>) : Point2f {
+		var targetExits = percepts.filter[it.type == "environment.ExitBody"]
+		var targetExit = targetExits.get(
+			(Math.random() * targetExits.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
+		)
+		currentTargetVistedOrNot = false
+		return currentTargetPosition = targetExit.position.clone
+	}
+
 	def extractTarget(percepts : List<Percept>) : Point2f { // class Percept implements MobileObject,
 		var allShops = Lists.newArrayList(
 			percepts.filter[it.type == "environment.ShopBody"]
 		)
 		if (this.currentTargetVistedOrNot) 
 		{
-			// 如果都去过了那就回家
+			// 如果都去过了那就出门
 			if (this.visitedShop.size() == allShops.size()) {
-				var targetExits = percepts.filter[it.type == "environment.ExitBody"]
-				var targetExit = targetExits.get(
-					(Math.random() * targetExits.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
-				)
-				currentTargetVistedOrNot = false
-				return currentTargetPosition = targetExit.position.clone
+				goOut(percepts)
 			}
 			// 如果这个商店 去过了 那就换一家店
 			else {
@@ -88,27 +92,44 @@ agent Visitor extends AbstractAnimat {
 		}
 	}
 	
-//	def targetPositionReachDection(s : ): boolean
-//	{// 目前是判断自己的身体部分有没有接触到这个点     圣体是一个圆
-//		
-//		var x = occurrence.body.shape.center.x - currentTargetPosition.x
-//		var y = occurrence.body.shape.center.y - currentTargetPosition.y
-//		
+	def runOut(percepts : List<Percept>, body : Percept) : Point2f {
+		// TODO ： 加速跑
+		//body.currentLinearSpeed = body.maxLinearSpeed
+		goOut(percepts)
+	}
+	
+	def dangerousDection(percepts : List<Percept>) : boolean {
+		var allDangers = Lists.newArrayList(
+			percepts.filter[it.type == "environment.ExploitationPlace"]
+		)
+		return this.dangerous=(
+			allDangers.size() != 0
+		)
+	}
+
+	def targetPositionReachDection(s : Shape2f): boolean
+	{
+	//	var x = occurrence.body.shape.center.x - currentTargetPosition.x
+	//	var y = occurrence.body.shape.center.y - currentTargetPosition.y
 //		return ((x * x + y * y) < (occurrence.body.shape.radius * occurrence.body.shape.radius))
-//	}
+		if (s.intersects(currentTargetPosition))
+			return currentTargetVistedOrNot = true
+	}
 
 	on PerceptionEvent {
 		// 判断想去的那个点  是否接触到自己的身体   ， 接触到了才算到达
-		if (occurrence.body.shape.intersects(currentTargetPosition))
-		{
-			this.currentTargetVistedOrNot = true
+		var target = new Point2f
+		occurrence.body.shape.targetPositionReachDection
+		occurrence.perceptions.dangerousDection
+
+		if (dangerous) {
+			target = occurrence.perceptions.runOut(occurrence.body)
 		}
-		//TODO: 判断到达出口后agent死亡
+		else {
+			target = occurrence.perceptions.extractTarget	
+		}
+			//TODO: 判断到达出口后agent死亡
 		
-		var target = occurrence.perceptions.extractTarget
-//1. 判断有无危险
-//2. 判断会不会撞到  会的话就减速
-//3. 
 		if (target !== null) {
 			// run the seek behaviour
 			this.seekBehaviour.run(

@@ -84,5 +84,7 @@ interface MobileObject extends SituatedObject {
 	 * @return the current linear motion.
 	 */
 	def getCurrentLinearMotion : Vector2f
+	
+	//def setCurrentLinearSpeed : float
 
 }
