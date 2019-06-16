@@ -81,6 +81,9 @@ agent Visitor extends AbstractAnimat {
 			// 如果都去过了那就出广场
 			if (this.visitedShop.size() == allShops.size()) {
 				goOut(percepts)
+				
+				
+				
 			}
 			// 如果这个商店 去过了 那就换一家店
 			else {

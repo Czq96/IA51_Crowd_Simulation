@@ -125,6 +125,47 @@ abstract class AbstractEnvironment implements Environment {
 		this.height
 	}
 
+	protected synchronized def removeChurchBody(body : ChurchBody) {
+
+		synchronized (this.churchBodyList) {
+			this.churchBodyList.remove(body.ID, body)
+		}
+		
+	}
+
+	protected synchronized def removeShopBody(body : ShopBody) {
+
+		synchronized (this.shopBodyList) {
+			this.shopBodyList.remove(body.ID, body)
+		}
+
+	}
+
+	protected synchronized def removeExitBody(body : ExitBody) {
+
+		synchronized (this.exitBodyList) {
+			this.exitBodyList.remove(body.ID, body)
+		}
+
+	}
+
+	protected synchronized def removeEntranceBody(body : EntranceBody) {
+
+		synchronized (this.entranceBodyList) {
+			this.entranceBodyList.remove(body.ID, body)
+		}
+
+	}
+
+	protected synchronized def removeAgentBody(body : AgentBody) {
+
+		synchronized (this.agentBodyList) {
+			this.agentBodyList.remove(body.ID, body)
+		}
+
+	}
+	
+	
 	protected synchronized def addAgentBody(body : AgentBody, position : Point2f, direction : float) {
 		if (this.init.get) {
 			synchronized (this.agentBodyList) {
