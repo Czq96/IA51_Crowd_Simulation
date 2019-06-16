@@ -61,16 +61,13 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		var body = new ShopBody(
 			id, 
 			new Circle2f(0f, 0f, SHOP_SIZE), // body
-			5f, // max linear speed m/s
-			0.5f, // max linear acceleration (m/s)/s
-			MathUtil.PI / 4f, // max angular speed r/s
-			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
 			frustum)
 		body.name = MessageFormat::format("Shop #{0}", this.shopBodyNumber + 1)
 		addShopBody(
 			body, 
-			positionOnScreen, //real position
-			Math::random as float * MathUtil.TWO_PI)
+			positionOnScreen//real position
+		//Math::random as float * MathUtil.TWO_PI
+		)
 	}
 
 	def createVisitor {
@@ -79,7 +76,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		var body = new AgentBody(
 			id,
 			new Circle2f(0f, 0f, VISITOR_SIZE), // body
-			5.0f, // max linear speed m/s
+			2.0f, // max linear speed m/s
 			0.5f, // max linear acceleration (m/s)/s
 			MathUtil.PI / 4f, // max angular speed r/s
 			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
@@ -98,17 +95,16 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 		var id = UUID::randomUUID
 		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
-		var body :ChurchBody = new ChurchBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
-			5f, // max linear speed m/s
-			0.5f, // max linear acceleration (m/s)/s
-			MathUtil.PI / 4f, // max angular speed r/s
-			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+		var body :ChurchBody = new ChurchBody(
+			id,
+			new Circle2f(0f, 0f, SHOP_SIZE), // body
 			frustum)
 		body.name = MessageFormat::format("Church #{0}", this.shopBodyNumber + 1)
 		addChurchBody(
 			body, 
-			new Point2f(325f,675f), //real position
-			Math::random as float * MathUtil.TWO_PI)
+			new Point2f(325f,675f) //real position
+			//Math::random as float * MathUtil.TWO_PI
+			)
 	
 	}
 
@@ -116,15 +112,16 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 		var id = UUID::randomUUID
 		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
-		var body : WallBody = new WallBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
-		5f, // max linear speed m/s
-		0.5f, // max linear acceleration (m/s)/s
-		MathUtil.PI / 4f, // max angular speed r/s
-		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
+		var body : WallBody = new WallBody(
+			id, 
+			new Circle2f(0f, 0f, SHOP_SIZE), // body
 			frustum)
 		body.name = MessageFormat::format("Wall #{0}", this.wallBodyNumber + 1)
-		addWallBody(body, positionOnScreen, //real position
-		Math::random as float * MathUtil.TWO_PI)
+		addWallBody(
+			body, 
+			positionOnScreen//real position
+		//Math::random as float * MathUtil.TWO_PI
+		)
 
 	}
 
@@ -132,15 +129,16 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 		var id = UUID::randomUUID
 		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
-		var body : ExitBody = new ExitBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
-		5f, // max linear speed m/s
-		0.5f, // max linear acceleration (m/s)/s
-		MathUtil.PI / 4f, // max angular speed r/s
-		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
-		frustum)
+		var body : ExitBody = new ExitBody(
+			id,
+			new Circle2f(0f, 0f, SHOP_SIZE), // body
+			frustum)
 		body.name = MessageFormat::format("Exit #{0}", this.exitBodyNumber + 1)
-		addExitBody(body, positionOnScreen, // real position
-		Math::random as float * MathUtil.TWO_PI)
+		addExitBody(
+			body, 
+			positionOnScreen // real position
+		//Math::random as float * MathUtil.TWO_PI
+		)
 
 	}
 
@@ -148,15 +146,16 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 		var id = UUID::randomUUID
 		var frustum = new CircleFrustum(id, 10 * SHOP_SIZE)
-		var body : EntranceBody = new EntranceBody(id, new Circle2f(0f, 0f, SHOP_SIZE), // body
-		5f, // max linear speed m/s
-		0.5f, // max linear acceleration (m/s)/s
-		MathUtil.PI / 4f, // max angular speed r/s
-		MathUtil.PI / 10f, // max angular acceleration (r/s)/s
-		frustum)
+		var body : EntranceBody = new EntranceBody(
+			id, 
+			new Circle2f(0f, 0f, SHOP_SIZE), // body
+			frustum)
 		body.name = MessageFormat::format("Entrance #{0}", this.entranceBodyNumber + 1)
-		addEntranceBody(body, positionOnScreen, // real position
-		Math::random as float * MathUtil.TWO_PI)
+		addEntranceBody(
+			body,
+			positionOnScreen // real position
+			//Math::random as float * MathUtil.TWO_PI
+			)
 
 	}
 
@@ -166,17 +165,14 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		var body = new ExploitationPlace(
 			id, 
 			new Circle2f(0f, 0f, SHOP_SIZE), // body
-			5f, // max linear speed m/s
-			0.5f, // max linear acceleration (m/s)/s
-			MathUtil.PI / 4f, // max angular speed r/s
-			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
 			frustum,
 			DANDER_RADIUS)
 		body.name = MessageFormat::format("Exploitation #{0}", this.exploitationPlaceNumber + 1)
 		addExploitationPlace(
 			body, 
-			positionOnScreen, // real position
-			Math::random as float * MathUtil.TWO_PI)
+			positionOnScreen // real position
+			//Math::random as float * MathUtil.TWO_PI
+			)
 		
 		//this.destory
 		}

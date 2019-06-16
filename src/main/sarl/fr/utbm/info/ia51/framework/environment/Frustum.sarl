@@ -48,7 +48,9 @@ interface Frustum extends Serializable, Cloneable {
 	 * @param orientation the orientation of the owner of the frustum.
 	 * @return the shape.
 	 */
-	def toShape(position : Point2f, orientation : Vector2f) : Shape2f<?> 
+	def toShape(position : Point2f, orientation : Vector2f) : Shape2f<?>
+
+	def toShape(position : Point2f) : Shape2f<?> 
 	
 	/** Create a filtering iterator.
 	 * The replied iterator may filtering the objects of the given iterator.

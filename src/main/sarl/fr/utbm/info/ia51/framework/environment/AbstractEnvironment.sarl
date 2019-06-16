@@ -139,90 +139,84 @@ abstract class AbstractEnvironment implements Environment {
 	}
 
 //修改了framework , 将shop添加到environment中
-	protected synchronized def addShopBody(body : ShopBody, position : Point2f, direction : float) {
+	protected synchronized def addShopBody(body : ShopBody, position : Point2f) {
+		// shop 的 direction 作为开门的方向
 		if (this.init.get) {
 			synchronized (this.shopBodyList) {
 				this.shopBodyList.put(body.ID, body)
 			}
 			body.position = position
-			body.angle = direction
 			body.onShopBodyCreated
 		} else {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");
 		}
 	}
 
-	protected synchronized def addChurchBody(body : ChurchBody, position : Point2f, direction : float) {
+	protected synchronized def addChurchBody(body : ChurchBody, position : Point2f) {
 		if (this.init.get) {
 			synchronized (this.churchBodyList) {
 				this.churchBodyList.put(body.ID,body)
 			}
 			body.position = position
-			body.angle = direction
 			body.onChurchBodyCreated
 		} else {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");
 		}
 	}
 
-	protected synchronized def addWallBody(body : WallBody, position : Point2f, direction : float) {
+	protected synchronized def addWallBody(body : WallBody, position : Point2f) {
 		if (this.init.get) {
 			synchronized (this.wallBodyList) {
 				this.wallBodyList.put(body.ID, body)
 			}
 			body.position = position
-			body.angle = direction
 			body.onWallBodyCreated
 		} else {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");
 		}
 	}
 
-	protected synchronized def addExitBody(body : ExitBody, position : Point2f, direction : float) {
+	protected synchronized def addExitBody(body : ExitBody, position : Point2f) {
 		if (this.init.get) {
 			synchronized (this.exitBodyList) {
 				this.exitBodyList.put(body.ID, body)
 			}
 			body.position = position
-			body.angle = direction
 			body.onExitBodyCreated
 		} else {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");
 		}
 	}
 
-	protected synchronized def addEntranceBody(body : EntranceBody, position : Point2f, direction : float) {
+	protected synchronized def addEntranceBody(body : EntranceBody, position : Point2f) {
 		if (this.init.get) {
 			synchronized (this.entranceBodyList) {
 				this.entranceBodyList.put(body.ID, body)
 			}
 			body.position = position
-			body.angle = direction
 			body.onEntranceBodyCreated
 		} else {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");
 		}
 	}
 
-	protected synchronized def addExpoitationPlace(body : ExploitationPlace, position : Point2f, direction : float) {
+	protected synchronized def addExpoitationPlace(body : ExploitationPlace, position : Point2f) {
 		if (this.init.get) {
 			synchronized (this.exploitationPlaceList) {
 				this.exploitationPlaceList.put(body.ID, body)
 			}
 			body.position = position
-			body.angle = direction
 			body.onExploitationPlaceCreated
 		} else {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");
 		}
 	}
 
-	protected synchronized def addExploitationPlace(body : ExploitationPlace, position : Point2f, direction : float) {
+	protected synchronized def addExploitationPlace(body : ExploitationPlace, position : Point2f) {
 		synchronized (this.exploitationPlaceList) {
 			this.exploitationPlaceList.put(body.ID, body)
 		}
 		body.position = position
-		body.angle = direction
 		body.onExploitationPlaceCreated
 	}
 	

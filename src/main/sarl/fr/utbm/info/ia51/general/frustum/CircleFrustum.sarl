@@ -59,4 +59,8 @@ class CircleFrustum extends AbstractFrustum {
 		new Circle2f(position, this.radius)
 	}
 
+	override toShape(position : Point2f) : Shape2f<?> {
+		new Circle2f(position, this.radius)
+	}
+	
 }

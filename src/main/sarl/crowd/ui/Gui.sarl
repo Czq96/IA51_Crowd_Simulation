@@ -188,18 +188,14 @@ class Gui extends AbstractFrameworkGUI {
 
 
 // TODO: 一下所有的都重复了，可以删掉写一个总的，使用 switch 或者是  if 来 判断画图
-	override paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+	override paintShopBody(g2d : Graphics2D, positionOnScreen : Point2f, shape : Shape,
 		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
 		var bounds = shape.bounds
 		g2d.color = Color::BLUE
 		if (this.showIcons.selected) {
-			paintObstacleIcon(g2d, SHOP_ICON, positionOnScreen, orientationOnScreen)
+			paintObstacleIcon(g2d, SHOP_ICON, positionOnScreen, null)
 
 		} else {
-			orientationOnScreen.scale(DIRECTION_RADIUS)
-			g2d.draw(
-				new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
-					positionOnScreen.y + orientationOnScreen.y))
 			g2d.fill(shape)
 		}
 		if (this.showPositions.selected) {
@@ -214,19 +210,14 @@ class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	override paintChurchBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+	override paintChurchBody(g2d : Graphics2D, positionOnScreen : Point2f,  shape : Shape,
 		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
 		var bounds = shape.bounds
 		g2d.color = Color::BLUE
 		if (this.showIcons.selected) {
-			paintObstacleIcon(g2d, CHURCH_ICON, positionOnScreen, orientationOnScreen)
-
+			paintObstacleIcon(g2d, CHURCH_ICON, positionOnScreen, null)
 		} else {
-			orientationOnScreen.scale(DIRECTION_RADIUS)
-			/*g2d.draw(
-				new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
-					positionOnScreen.y + orientationOnScreen.y))*/
-			g2d.fill(shape)
+				g2d.fill(shape)
 		}
 		if (this.showPositions.selected) {
 			var oldFont = g2d.font
@@ -240,20 +231,14 @@ class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	override paintWallBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
+	override paintWallBody(g2d : Graphics2D, positionOnScreen : Point2f,
 		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
 		var bounds = shape.bounds
 		g2d.color = Color::BLUE
 		if (this.showIcons.selected) {
-			paintObstacleIcon(g2d, WALL_ICON, positionOnScreen, orientationOnScreen)
+			paintObstacleIcon(g2d, WALL_ICON, positionOnScreen, null)
 
 		} else {
-			orientationOnScreen.scale(DIRECTION_RADIUS)
-
-			/* g2d.draw(
-			 * new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
-			 * positionOnScreen.y + orientationOnScreen.y))
-			 */
 			g2d.fill(shape)
 		}
 		if (this.showPositions.selected) {
@@ -268,20 +253,14 @@ class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	override paintExitBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+	override paintExitBody(g2d : Graphics2D, positionOnScreen : Point2f, shape : Shape,
 		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
 		var bounds = shape.bounds
 		g2d.color = Color::BLUE
 		if (this.showIcons.selected) {
-			paintObstacleIcon(g2d, EXIT_ICON, positionOnScreen, orientationOnScreen)
+			paintObstacleIcon(g2d, EXIT_ICON, positionOnScreen, null)
 
 		} else {
-			orientationOnScreen.scale(DIRECTION_RADIUS)
-
-			/* g2d.draw(
-			 * new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
-			 * positionOnScreen.y + orientationOnScreen.y))
-			 */
 			g2d.fill(shape)
 		}
 		if (this.showPositions.selected) {
@@ -296,15 +275,14 @@ class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	override paintEntranceBody(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
+	override paintEntranceBody(g2d : Graphics2D, positionOnScreen : Point2f,  shape : Shape,
 		type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
 		var bounds = shape.bounds
 		g2d.color = Color::BLUE
 		if (this.showIcons.selected) {
-			paintObstacleIcon(g2d, ENTRANCE_ICON, positionOnScreen, orientationOnScreen)
+			paintObstacleIcon(g2d, ENTRANCE_ICON, positionOnScreen, null)
 
 		} else {
-			orientationOnScreen.scale(DIRECTION_RADIUS)
 			g2d.fill(shape)
 		}
 		if (this.showPositions.selected) {
@@ -319,7 +297,7 @@ class Gui extends AbstractFrameworkGUI {
 		}
 	}
 
-	override paintExplodedPlace(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
+	override paintExplodedPlace(g2d : Graphics2D, positionOnScreen : Point2f,
 		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape, danger : float) {
 			
 		var bounds = shape.bounds
@@ -340,33 +318,26 @@ class Gui extends AbstractFrameworkGUI {
 		alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
 		g2d.setComposite(alcom);
 		if (this.showIcons.selected) {
-			paintObstacleIcon(g2d, EXPLODED_PLACE_ICON, positionOnScreen, orientationOnScreen)			
+			paintObstacleIcon(g2d, EXPLODED_PLACE_ICON, positionOnScreen,null)			
 		} else {
-			orientationOnScreen.scale(DIRECTION_RADIUS)
 			g2d.fill(shape)
-		}
-		
-		if (this.showPositions.selected) {
-			var oldFont = g2d.font
-			var f = oldFont.deriveFont(6)
-			g2d.color = g2d.background.darker
-			g2d.font = f
-			var fmt = new DecimalFormat("#.#")
-			g2d.drawString("(" + fmt.format(positionInMAS.x) + ";" + fmt.format(positionInMAS.y) + ")",
-				bounds.maxX as float + 2, bounds.maxY as float + 2)
-			g2d.font = oldFont
 		}
 	}
 
-	//显示鼠标的样子
+	//显示 没有方向的物体的样子
 	override paintSituatedObject(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
 		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f) {
 		var bounds = shape.bounds
 		g2d.color = Color.GREEN
 
 		var icon : Icon
-		if ("TARGET" == type) {
-			icon = BOMB_ICON
+//		if ("TARGET" == type) {
+//			icon = BOMB_ICON
+//		}
+		switch(type)
+		{
+			case "TARGET":
+				icon = BOMB_ICON		
 		}
 
 		if (this.showIcons.selected && icon !== null) {
@@ -400,6 +371,8 @@ class Gui extends AbstractFrameworkGUI {
 		}*/
 		icon.paintIcon(this, g2d, position.x as int - SHOP_ICON_WIDTH / 2, position.y as int - SHOP_ICON_HEIGHT / 2);
 	}
+	
+	
 	
 	
 // 用来画  商店  的图像和方向

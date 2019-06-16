@@ -10,18 +10,17 @@ import java.text.MessageFormat
 import fr.utbm.info.ia51.framework.environment.Frustum
 import fr.utbm.info.ia51.framework.environment.Body
 import fr.utbm.info.ia51.framework.environment.Percept
-import fr.utbm.info.ia51.framework.environment.AbstractMobileObject
+import fr.utbm.info.ia51.framework.environment.AbstractSituatedObject
 
 // 或许可以直接继承  AbstractSituatedObject
-class WallBody extends AbstractMobileObject implements Body {
+class WallBody extends AbstractSituatedObject implements Body {
 
 	val frustum : Frustum
 	val type : String
 
 	// 这里的参数在 AbstractSituatedObject 中
-	new (id : UUID, shape : Shape2f<?>, maxLinearSpeed : float, maxLinearAcceleration : float, maxAngularSpeed : float,
-		maxAngularAcceleration : float, frustum : Frustum) {
-		super(id, shape, maxLinearSpeed, maxLinearAcceleration, maxAngularSpeed, maxAngularAcceleration)
+	new (id : UUID, shape : Shape2f<?>, frustum : Frustum) {
+		super(id, shape)
 		assert frustum === null || id == frustum.owner
 		this.frustum = frustum
 		this.type = "Wall"
