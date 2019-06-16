@@ -27,7 +27,7 @@ agent SimulationLauncher extends FrameworkLauncher {
 		var environment = new SquareMap(WORLD_SIZE_X, WORLD_SIZE_Y)
 
 		//var type = DynamicType.KINEMATIC ;// 这里是DynamicType 类型， 是agent的行为类型
-		//TODO: 完成visitor 和 environment
+		
 		
 		environment.createChurch
 		

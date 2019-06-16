@@ -7,6 +7,7 @@ import fr.utbm.info.ia51.framework.time.TimeManager
 import fr.utbm.info.ia51.framework.util.Resources
 import java.awt.Color
 import java.awt.Graphics2D
+import java.awt.AlphaComposite // 为了半透明图像
 import java.awt.GridLayout
 import java.awt.Shape
 import java.awt.geom.Line2D
@@ -319,22 +320,28 @@ class Gui extends AbstractFrameworkGUI {
 	}
 
 	override paintExplodedPlace(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f,
-		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape) {
+		shape : Shape, type : Serializable, name : String, positionInMAS : Point2f, frustum : Shape, danger : float) {
 			// TODO : 画出危险区域的红圈
 		var bounds = shape.bounds
 		g2d.color = Color::BLUE
 		if (this.showIcons.selected) {
-			paintObstacleIcon(g2d, EXPLODED_PLACE_ICON, positionOnScreen, orientationOnScreen)
-
+			paintObstacleIcon(g2d, EXPLODED_PLACE_ICON, positionOnScreen, orientationOnScreen)			
 		} else {
 			orientationOnScreen.scale(DIRECTION_RADIUS)
-
-			/* g2d.draw(
-			 * new Line2D.Float(positionOnScreen.x, positionOnScreen.y, positionOnScreen.x + orientationOnScreen.x,
-			 * positionOnScreen.y + orientationOnScreen.y))
-			 */
 			g2d.fill(shape)
 		}
+		var alpha = 0.1f;
+		var alcom = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
+		g2d.setComposite(alcom);
+		g2d.setColor(Color.red);
+		g2d.fillOval(
+			(positionOnScreen.x).intValue,
+			(positionOnScreen.y).intValue,
+			(danger*2).intValue,
+			(danger*2).intValue
+		)
+		
+		
 		if (this.showPositions.selected) {
 			var oldFont = g2d.font
 			var f = oldFont.deriveFont(6)

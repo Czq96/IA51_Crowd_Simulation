@@ -165,7 +165,7 @@ interface FrameworkGUI extends EnvironmentListener {
 		type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
 
 	def paintExplodedPlace(g2d : Graphics2D, positionOnScreen : Point2f, orientationOnScreen : Vector2f, shape : Shape,
-		type : Serializable, name : String, positionInMas : Point2f, frustum : Shape)
+		type : Serializable, name : String, positionInMas : Point2f, frustum : Shape, danger : float)
 
 	/** Change the mouse target.
 	 * 
