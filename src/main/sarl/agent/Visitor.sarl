@@ -57,12 +57,18 @@ agent Visitor extends AbstractAnimat {
 	}
 
 	def goOut(percepts : List<Percept>) : Point2f {
-		var targetExits = percepts.filter[it.type == "environment.ExitBody"]
-		var targetExit = targetExits.get(
-			(Math.random() * targetExits.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
-		)
-		currentTargetVistedOrNot = false
-		return currentTargetPosition = targetExit.position.clone
+		if (escapeBegin) {
+			this.currentTargetPosition
+			}
+		else {
+			escapeBegin = true
+			var targetExits = percepts.filter[it.type == "environment.ExitBody"]
+			var targetExit = targetExits.get(
+				(Math.random() * targetExits.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
+				)
+			currentTargetVistedOrNot = false
+			return currentTargetPosition = targetExit.position.clone
+		}
 	}
 
 	def extractTarget(percepts : List<Percept>) : Point2f { // class Percept implements MobileObject,
@@ -97,13 +103,13 @@ agent Visitor extends AbstractAnimat {
 	def runOut(percepts : List<Percept>, body : Percept) : Point2f {
 		// TODO ： 加速跑
 		//body.currentLinearSpeed = body.maxLinearSpeed
-		if (escapeBegin) {
-			this.currentTargetPosition
-			}
-		else {
-			escapeBegin = true
+//		if (escapeBegin) {
+//			this.currentTargetPosition
+//			}
+//		else {
+//			escapeBegin = true
 			goOut(percepts)
-		}
+//		}
 	}
 	
 	def dangerousDection(percepts : List<Percept>) : boolean {
