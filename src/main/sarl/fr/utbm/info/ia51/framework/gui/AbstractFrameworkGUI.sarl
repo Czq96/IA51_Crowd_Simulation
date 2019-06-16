@@ -235,7 +235,6 @@ abstract class AbstractFrameworkGUI extends JFrame implements FrameworkGUI {
 				MessageFormat::format("Target: ({0,number,#.#}; {1,number,#.#})", masPosition.x, masPosition.y)
 		}
 	}
-
 	override getWorldWidth : float {
 		this.worldWidth
 	}

@@ -112,60 +112,6 @@ class WorldPanel extends JPanel {
 					o.position,
 					this.window.mas2screen(frustumShape))
 			} 
-			else if (o instanceof ShopBody) {
-				var frustum = o.frustum
-				var frustumShape = frustum?.toShape(o.position) // , o.direction
-				this.window.paintShopBody(
-					g2d, 
-					positionOnScreen, 
-				//	directionOnScreen, 
-					awtShape,
-					o.type,
-					o.name,
-					o.position, 
-					this.window.mas2screen(frustumShape))
-				
-			} 
-			else if (o instanceof WallBody) {
-				var frustum = o.frustum
-				var frustumShape = frustum?.toShape(o.position)
-				this.window.paintWallBody(
-					g2d, 
-					positionOnScreen, 
-					//directionOnScreen,
-					awtShape, 
-					o.type, 
-					o.name,
-					o.position, 
-					this.window.mas2screen(frustumShape))
-					
-					} 
-			else if (o instanceof ChurchBody) {
-				var frustum = o.frustum
-				var frustumShape = frustum?.toShape(o.position)
-				this.window.paintChurchBody(
-					g2d,
-					positionOnScreen,
-					//directionOnScreen, 
-					awtShape, 
-					o.type, 
-					o.name,
-					o.position, 
-					this.window.mas2screen(frustumShape))
-
-			} else if (o instanceof ExitBody) {
-				var frustum = o.frustum
-				var frustumShape = frustum?.toShape(o.position)
-				this.window.paintExitBody(g2d, positionOnScreen, awtShape, o.type, o.name,
-					o.position, this.window.mas2screen(frustumShape))
-
-			} else if (o instanceof EntranceBody) {
-				var frustum = o.frustum
-				var frustumShape = frustum?.toShape(o.position)
-				this.window.paintEntranceBody(g2d, positionOnScreen, awtShape, o.type, o.name,
-					o.position, this.window.mas2screen(frustumShape))
-
-			} // paintExplodedPlace
 			else if (o instanceof ExploitationPlace) {
 				var danger = o.getdangerousRadius()  // TODO:  
 				var frustum = o.frustum

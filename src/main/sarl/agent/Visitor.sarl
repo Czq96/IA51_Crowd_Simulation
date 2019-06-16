@@ -62,7 +62,7 @@ agent Visitor extends AbstractAnimat {
 			}
 		else {
 			escapeBegin = true
-			var targetExits = percepts.filter[it.type == "environment.ExitBody"]
+			var targetExits = percepts.filter[it.type == "EXIT"]
 			var targetExit = targetExits.get(
 				(Math.random() * targetExits.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
 				)
@@ -73,7 +73,7 @@ agent Visitor extends AbstractAnimat {
 
 	def extractTarget(percepts : List<Percept>) : Point2f { // class Percept implements MobileObject,
 		var allShops = Lists.newArrayList(
-			percepts.filter[it.type == "environment.ShopBody"]
+			percepts.filter[it.type == "SHOP"]
 		)
 		//如果到达了那就换地方
 		if (this.currentTargetVistedOrNot) 
@@ -114,7 +114,7 @@ agent Visitor extends AbstractAnimat {
 	
 	def dangerousDection(percepts : List<Percept>) : boolean {
 		var allDangers = Lists.newArrayList(
-			percepts.filter[it.type == "environment.ExploitationPlace"]
+			percepts.filter[it.type == "EXPLOITATION"]
 		)
 		return this.dangerous=(
 			allDangers.size() != 0

@@ -15,7 +15,6 @@ import fr.utbm.info.ia51.framework.environment.AbstractSituatedObject
 class EntranceBody extends AbstractSituatedObject implements Body {
 
 	val frustum : Frustum
-	val type : String
 
 	// 这里的参数在 AbstractSituatedObject 中
 	new (id : UUID, shape : Shape2f<?>, frustum : Frustum) {

@@ -16,14 +16,13 @@ import fr.utbm.info.ia51.framework.environment.AbstractSituatedObject
 class ChurchBody extends AbstractSituatedObject implements Body {
 
 	val frustum : Frustum
-	val type : String
 
 	// 这里的参数在 AbstractSituatedObject 中
 	new (id : UUID, shape : Shape2f<?>, frustum : Frustum) {
 		super(id, shape)
 		assert frustum === null || id == frustum.owner
 		this.frustum = frustum
-		this.type = "Church"
+		this.type = "CHURCH"
 	}
 
 	def getFrustum : Frustum {
