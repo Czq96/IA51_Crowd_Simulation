@@ -37,9 +37,12 @@ class FrameworkMouseAdapter extends MouseAdapter {
 	new (g : FrameworkGUI) {
 		this.parent = new WeakReference(g)
 	}
-
+//
 	override mouseClicked(e : MouseEvent) {
-		this.parent.get.mouseClickedTargetOnScreen = new Point2f(e.x, e.y)
+		//var GUI = this.parent.get()
+		// if (e.x < GUI.getWorldWidth && e.y < GUI.getWorldHeight)
+		//if(this.parent.get.mouseTargetOnScreen != null)
+			this.parent.get.mouseClickedTargetOnScreen = new Point2f(e.x, e.y)
 	}
 	
 	override mouseDragged(e : MouseEvent) {

@@ -332,7 +332,11 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 
 //  这个是鼠标越过的 时候
 	override setMouseTarget(target : Point2f) {
-		this.mouseTarget = new MouseTarget(target.x, target.y)
+		if (target === null){
+			
+		}
+		else
+			this.mouseTarget = new MouseTarget(target.x, target.y)
 		//this.createExploitation(target)
 	}
 

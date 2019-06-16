@@ -160,7 +160,7 @@ class WorldPanel extends JPanel {
 
 			} // paintExplodedPlace
 			else if (o instanceof ExploitationPlace) {
-				var danger = o.getdangerousRadius()  // TODO:  为什么不能 i选哪个是frustum一样运行
+				var danger = o.getdangerousRadius()  // TODO:  
 				var frustum = o.frustum
 				var frustumShape = frustum?.toShape(o.position, o.direction)
 				this.window.paintExplodedPlace(g2d, positionOnScreen, directionOnScreen, awtShape, o.type, o.name,
