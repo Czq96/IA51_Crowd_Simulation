@@ -302,7 +302,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			if (body2 !== null) {
 				val body2Bounds = body2.shape
 				if (body1Bounds.intersects(body2Bounds)) { // intersects  是  circle 中用判断是否相撞的函数
-					move.set(0, 0)
+					//move.set(0, 0)
 					return
 				}
 			}

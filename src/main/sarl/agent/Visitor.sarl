@@ -34,6 +34,7 @@ agent Visitor extends AbstractAnimat {
 	var currentTargetPosition = new Point2f
 	var currentTargetVistedOrNot = true
 	var dangerous = false
+	var escapeBegin = false
 	
 
 	val STOP_RADIUS = MathUtil.PI / 10f
@@ -68,9 +69,10 @@ agent Visitor extends AbstractAnimat {
 		var allShops = Lists.newArrayList(
 			percepts.filter[it.type == "environment.ShopBody"]
 		)
+		//如果到达了那就换地方
 		if (this.currentTargetVistedOrNot) 
 		{
-			// 如果都去过了那就出门
+			// 如果都去过了那就出广场
 			if (this.visitedShop.size() == allShops.size()) {
 				goOut(percepts)
 			}
@@ -95,7 +97,13 @@ agent Visitor extends AbstractAnimat {
 	def runOut(percepts : List<Percept>, body : Percept) : Point2f {
 		// TODO ： 加速跑
 		//body.currentLinearSpeed = body.maxLinearSpeed
-		goOut(percepts)
+		if (escapeBegin) {
+			this.currentTargetPosition
+			}
+		else {
+			escapeBegin = true
+			goOut(percepts)
+		}
 	}
 	
 	def dangerousDection(percepts : List<Percept>) : boolean {
@@ -122,8 +130,8 @@ agent Visitor extends AbstractAnimat {
 		occurrence.body.shape.targetPositionReachDection
 		occurrence.perceptions.dangerousDection
 
-		if (dangerous) {
-			target = occurrence.perceptions.runOut(occurrence.body)
+		if (dangerous ) {
+				target = occurrence.perceptions.runOut(occurrence.body)
 		}
 		else {
 			target = occurrence.perceptions.extractTarget	
