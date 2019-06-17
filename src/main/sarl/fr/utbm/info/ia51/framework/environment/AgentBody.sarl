@@ -27,6 +27,7 @@ import fr.utbm.info.ia51.framework.math.Vector2f
 import fr.utbm.info.ia51.framework.math.MathUtil
 import java.util.List
 import java.text.MessageFormat
+import fr.utbm.info.ia51.framework.math.Circle2f
 
 /**
  * Object on the environment.
@@ -51,12 +52,13 @@ class AgentBody extends AbstractMobileObject implements Body {
 	 * @param maxAngularAcceleration is the maximal angular acceleration.
 	 * @param frustum the field-of-view associated to the body.
 	 */
-	new (id : UUID, shape : Shape2f<?>, maxLinearSpeed : float, maxLinearAcceleration : float,
-			maxAngularSpeed : float, maxAngularAcceleration : float, frustum : Frustum, slowDownShape : Shape2f<?>) {
+	new (id : UUID, shape : Circle2f, maxLinearSpeed : float, maxLinearAcceleration : float,
+			maxAngularSpeed : float, maxAngularAcceleration : float, frustum : Frustum, slowDownShape : Circle2f) {
 		super(id, shape, maxLinearSpeed, maxLinearAcceleration, maxAngularSpeed, maxAngularAcceleration, slowDownShape)
 		assert frustum === null || id == frustum.owner
 		this.frustum = frustum
 		this.type = "BODY"
+		
 	}
 	
 	override clone : AgentBody {

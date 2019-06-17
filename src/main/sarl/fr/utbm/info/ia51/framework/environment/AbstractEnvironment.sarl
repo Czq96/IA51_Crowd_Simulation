@@ -179,6 +179,7 @@ abstract class AbstractEnvironment implements Environment {
 			}
 			body.position = position
 			body.angle = direction
+			body.slowDownShape.center.set(position.x,position.y)
 			body.onAgentBodyCreated
 		} else {
 			throw new IllegalStateException("You cannot call this function after the start of the simulation");

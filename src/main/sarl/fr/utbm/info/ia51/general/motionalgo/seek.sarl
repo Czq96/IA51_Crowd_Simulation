@@ -62,23 +62,23 @@ abstract class AbstractSeekAlgorithm implements SeekAlgorithm {
 		var myshape = myBody.slowDownShape
 		for(p : percepts)
 		{
-			if (myshape.intersects(p.shape))
+			if (myshape.intersects(p.shape)&&p.type=="BODY")
 			{
 				collision = true
-				//sbreak
+				break
 			}
 		}
 		
 		if (collision) // TODO collision --> true
 		{ // 如果碰撞 旋转角度 direction     减速 direction.length
-			direction = new Vector2f(destination.x * Math::sin(3.1415 / 4) - myBody.position.x,
-				destination.y * Math::sin(3.1415 / 4) - myBody.position.y)
-			direction.length = myBody.maxLinearSpeed/ 100//
+			//direction = new Vector2f(direction.x * Math::cos(3.1415 / 6)-direction.y * Math::sin(3.1415 / 6),
+				//destination.y * Math::cos(3.1415 / 6) + direction.x * Math::sin(3.1415 / 6))
+			direction.length = myBody.maxLinearSpeed/ 10//
 			output.linear = direction
 		}
 		else {
 			
-			direction.length = myBody.maxLinearSpeed//
+			direction.length = myBody.maxLinearSpeed * 2//
 			output.linear = direction
 		}
 		

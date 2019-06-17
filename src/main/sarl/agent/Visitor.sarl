@@ -20,6 +20,7 @@ import fr.utbm.info.ia51.framework.math.Point2f
 import fr.utbm.info.ia51.framework.math.Shape2f
 import fr.utbm.info.ia51.framework.math.Vector2f
 import fr.utbm.info.ia51.framework.^agent.MotionAlgorithmOutput
+import java.io.Serializable
 
 /** 
  * @author c
@@ -126,7 +127,7 @@ agent Visitor extends AbstractAnimat {
 			return currentTargetVistedOrNot = true
 	}
 
-	def reduceSpeedDection(myself:Shape2f, target:Shape2f):boolean
+	def reduceSpeedDection(myself : Shape2f, target : Shape2f) : boolean
 	{
 		if(myself.intersects(target))
 		{
