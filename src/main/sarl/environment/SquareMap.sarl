@@ -76,7 +76,7 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 		var id = UUID::randomUUID
 		var frustum = new CircleFrustum(id, 10 * VISITOR_SIZE)
 		var r = new Random()
-		var randomSpeed : float = (r.nextFloat()*(10-1)+1) // 随机生成速度 1~2 之间
+		var randomSpeed : float = (r.nextFloat()*(2-1)+1) // 随机生成速度 1~2 之间
 		var body = new AgentBody(
 			id,
 			new Circle2f(0f, 0f, VISITOR_SIZE), // body

@@ -25,6 +25,8 @@ import fr.utbm.info.ia51.framework.environment.DynamicType
 import fr.utbm.info.ia51.framework.math.Point2f
 import fr.utbm.info.ia51.framework.environment.Percept
 import java.util.List
+import java.util.*
+import fr.utbm.info.ia51.framework.math.Vector2f
 
 /** 
  * Seek Behavior.
@@ -56,10 +58,30 @@ abstract class AbstractSeekAlgorithm implements SeekAlgorithm {
 		var output = new MotionAlgorithmOutput(this.dynamicType)
 
 		var direction = destination - myBody.position
-		direction.length = myBody.maxLinearSpeed // 
-
-		output.linear = direction
-
+		var collision = false
+		var myshape = myBody.slowDownShape
+		for(p : percepts)
+		{
+			if (myshape.intersects(p.shape))
+			{
+				collision = true
+				//sbreak
+			}
+		}
+		
+		if (collision) // TODO collision --> true
+		{ // 如果碰撞 旋转角度 direction     减速 direction.length
+			direction = new Vector2f(destination.x * Math::sin(3.1415 / 4) - myBody.position.x,
+				destination.y * Math::sin(3.1415 / 4) - myBody.position.y)
+			direction.length = myBody.maxLinearSpeed/ 100//
+			output.linear = direction
+		}
+		else {
+			
+			direction.length = myBody.maxLinearSpeed//
+			output.linear = direction
+		}
+		
 		return output
 	}
 
