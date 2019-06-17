@@ -159,11 +159,9 @@ agent Visitor extends AbstractAnimat {
 		
 		if (target !== null) {
 		  // run the seek behaviour
-		 
 			this.seekBehaviour.run(
-				occurrence.body.position,
-				occurrence.body.currentLinearSpeed,
-				occurrence.body.maxLinear,
+				occurrence.body,
+				occurrence.perceptions,
 				target
 //				currentTargetObj
 			).emitInfluence 

@@ -23,6 +23,9 @@ package fr.utbm.info.ia51.general.motionalgo
 import fr.utbm.info.ia51.framework.^agent.MotionAlgorithmOutput
 import fr.utbm.info.ia51.framework.environment.DynamicType
 import fr.utbm.info.ia51.framework.math.Point2f
+import fr.utbm.info.ia51.framework.environment.Percept
+import java.util.List
+
 /** 
  * Seek Behavior.
  * 
@@ -37,7 +40,7 @@ interface SeekAlgorithm {
 		 * @param target is the point to flee.
 		 * @return the behaviour output.
 		 */
-	def run(position : Point2f, linearSpeed : float, maxLinear : float, target : Point2f) : MotionAlgorithmOutput
+	def run(myBody : Percept, percepts : List<Percept>, target : Point2f) : MotionAlgorithmOutput
 
 }
 
@@ -49,11 +52,11 @@ abstract class AbstractSeekAlgorithm implements SeekAlgorithm {
 
 	abstract def getDynamicType : DynamicType
 
-	override run(position : Point2f, linearSpeed : float, maxLinear : float, target : Point2f) : MotionAlgorithmOutput {
+	override run(myBody : Percept, percepts : List<Percept>, destination : Point2f) : MotionAlgorithmOutput {
 		var output = new MotionAlgorithmOutput(this.dynamicType)
 
-		var direction = target - position
-		direction.length = maxLinear
+		var direction = destination - myBody.position
+		direction.length = myBody.maxLinearSpeed // 
 
 		output.linear = direction
 
