@@ -43,14 +43,16 @@ class Percept implements MobileObject, Serializable {
 	var position : Point2f
 	val angle : float
 	val type : Serializable
-	val maxLinearSpeed : float 
-	val maxLinearAcceleration : float 
+	val maxLinearSpeed : float
+	val maxLinearAcceleration : float
+	// val currentLinearSpeed : float    //this.currentLinearMotion?.length
 	var currentLinearMotion : Vector2f 
 	var maxAngularSpeed : float
 	val maxAngularAcceleration : float 
 	val currentAngularSpeed : float
 	val name : String 
-	
+	var bodySize : float = 0f
+	var slowDownShape : Shape2f 
 	/**
 	 * @param perceivedObject is the perceived object.
 	 */
@@ -69,6 +71,7 @@ class Percept implements MobileObject, Serializable {
 			this.maxLinearSpeed = perceivedObject.maxLinearSpeed
 			this.currentAngularSpeed = perceivedObject.currentAngularSpeed
 			this.currentLinearMotion = perceivedObject.currentLinearMotion.clone
+			this.slowDownShape = perceivedObject.slowDownShape
 		} else {
 			this.angle = 0f
 			this.maxAngularAcceleration = 0f
@@ -77,12 +80,16 @@ class Percept implements MobileObject, Serializable {
 			this.maxLinearSpeed = 0f
 			this.currentAngularSpeed = 0f
 			this.currentLinearMotion = null
+			this.slowDownShape = null
 		}
 		if (perceivedObject instanceof AgentBody) {
 			this.bodyId = perceivedObject.ID
 		} else {
 			this.bodyId = null
 		}
+//		if (perceivedObject.) {
+//			this.bodySize = 
+//		}
 	}
 
 	override clone : Percept {
@@ -90,6 +97,7 @@ class Percept implements MobileObject, Serializable {
 		clone.currentLinearMotion = this.currentLinearMotion.clone
 		clone.position = this.position.clone
 		clone.shape = this.shape.clone
+		clone.slowDownShape = this.slowDownShape.clone
 		return clone
 	}
 	
@@ -183,6 +191,10 @@ class Percept implements MobileObject, Serializable {
 		this.currentLinearMotion?.length
 	}
 
+//	def setCurrentLinearSpeed(speed : float){
+//		this.currentLinearSpeed= speed
+//	}
+
 	override getCurrentLinearMotion : Vector2f {
 		this.currentLinearMotion ?: new Vector2f
 	}
@@ -198,5 +210,9 @@ class Percept implements MobileObject, Serializable {
 	override toString : String {
 		if(this.name.isNullOrEmpty) super.toString() else this.name
 	}
-
+	
+	override getSlowDownShape : Shape2f<?> {
+		this.slowDownShape
+	}
+	
 }

@@ -34,7 +34,7 @@ import fr.utbm.info.ia51.framework.math.Vector2f
 class MotionAlgorithmOutput implements Serializable {
 
 	val type : DynamicType 
-	val linear = new Vector2f
+	val linear = new Vector2f //下一步移动的地点？
 	var angular = 0f
 	
 	/**

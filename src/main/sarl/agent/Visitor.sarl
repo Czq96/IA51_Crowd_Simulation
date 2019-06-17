@@ -19,6 +19,7 @@ import com.google.common.collect.Lists;
 import fr.utbm.info.ia51.framework.math.Point2f
 import fr.utbm.info.ia51.framework.math.Shape2f
 import fr.utbm.info.ia51.framework.math.Vector2f
+import fr.utbm.info.ia51.framework.^agent.MotionAlgorithmOutput
 
 /** 
  * @author c
@@ -35,6 +36,7 @@ agent Visitor extends AbstractAnimat {
 	var currentTargetVistedOrNot = true
 	var dangerous = false
 	var escapeBegin = false
+//	var currentTargetObj : Percept
 	
 
 	val STOP_RADIUS = MathUtil.PI / 10f
@@ -67,6 +69,7 @@ agent Visitor extends AbstractAnimat {
 				(Math.random() * targetExits.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
 				)
 			currentTargetVistedOrNot = false
+//			currentTargetObj = targetExit
 			return currentTargetPosition = targetExit.position.clone
 		}
 	}
@@ -89,7 +92,8 @@ agent Visitor extends AbstractAnimat {
 					(Math.random() * allShops.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
 				)
 				this.visitedShop.add(targetShop)
-				currentTargetPosition = targetShop.position.clone
+//				currentTargetObj = targetShop
+				currentTargetPosition = new Point2f(targetShop.position.x, targetShop.position.y - 27f) // 产生在商店的下方 /  
 				currentTargetVistedOrNot = false
 				return targetShop.position
 			}
@@ -102,12 +106,7 @@ agent Visitor extends AbstractAnimat {
 	
 	def runOut(percepts : List<Percept>, body : Percept) : Point2f {
 		// TODO ： 加速跑
-		//body.currentLinearSpeed = body.maxLinearSpeed
-//		if (escapeBegin) {
-//			this.currentTargetPosition
-//			}
-//		else {
-//			escapeBegin = true
+			//body.currentLinearSpeed = body.maxLinearSpeed
 			goOut(percepts)
 //		}
 	}
@@ -127,6 +126,24 @@ agent Visitor extends AbstractAnimat {
 			return currentTargetVistedOrNot = true
 	}
 
+	def reduceSpeedDection(myself:Shape2f, target:Shape2f):boolean
+	{
+		if(myself.intersects(target))
+		{
+			
+			true
+		}
+		else
+			false		
+	}
+	
+//	def goToPointWithOutCollitio(myBody : Percept, percepts : List<Percept>, target : Point2f) : MotionAlgorithmOutput {
+//		var output = new MotionAlgorithmOutput(this.dynamicType)
+//		
+//		
+//	}
+	
+	
 	on PerceptionEvent {
 		// 判断想去的那个点  是否接触到自己的身体   ， 接触到了才算到达
 		var target = new Point2f
@@ -141,12 +158,14 @@ agent Visitor extends AbstractAnimat {
 		}
 		
 		if (target !== null) {
-			// run the seek behaviour
+		  // run the seek behaviour
+		 
 			this.seekBehaviour.run(
 				occurrence.body.position,
 				occurrence.body.currentLinearSpeed,
 				occurrence.body.maxLinear,
 				target
+//				currentTargetObj
 			).emitInfluence 
 			// emitInfluenct 用来计算influence
 		} else {
@@ -162,11 +181,4 @@ agent Visitor extends AbstractAnimat {
 			).emitInfluence
 		}
 	}
-//	on collisionDected{
-//		
-	//	}
-
-	//	on collisionDected{
-	//
-	//	}
 }

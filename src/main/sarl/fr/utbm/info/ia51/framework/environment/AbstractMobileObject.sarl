@@ -40,9 +40,12 @@ abstract class AbstractMobileObject extends AbstractSituatedObject implements Mo
 	val maxLinearAcceleration : float
 	val maxAngularSpeed : float
 	val maxAngularAcceleration : float
+	val slowDownShape : Shape2f // 减速 + 小转弯
+	// val rotationShape l
 
 	var angle = 0f
 	var currentAngularSpeed = 0f
+	var currentLinearSpeed = 0f
 	var linearMove = new Vector2f
 	
 
@@ -55,13 +58,14 @@ abstract class AbstractMobileObject extends AbstractSituatedObject implements Mo
 	 * @param maxAngularAcceleration is the maximal angular acceleration.
 	 */
 	new (id : UUID, shape : Shape2f<?>, maxLinearSpeed : float, maxLinearAcceleration : float, maxAngularSpeed : float,
-		maxAngularAcceleration : float) {
+		maxAngularAcceleration : float, slowDownShape : Shape2f<?>) {
 			
 		super(id, shape)
 		this.maxLinearSpeed = maxLinearSpeed.abs
 		this.maxLinearAcceleration = maxLinearAcceleration.abs
 		this.maxAngularAcceleration = maxAngularAcceleration.abs
 		this.maxAngularSpeed = maxAngularSpeed.abs
+		this.slowDownShape = slowDownShape
 	}
 	
 	override clone : AbstractMobileObject {
@@ -76,6 +80,10 @@ abstract class AbstractMobileObject extends AbstractSituatedObject implements Mo
 	
 	override getDirection : Vector2f {
 		Vector2f::toOrientationVector(this.angle)
+	}
+	
+	override getSlowDownShape : Shape2f{
+		return this.slowDownShape
 	}
 
 	/** Set the orientation of the object.
@@ -118,7 +126,18 @@ abstract class AbstractMobileObject extends AbstractSituatedObject implements Mo
 	}
 
 	override getCurrentLinearSpeed : float {
-		this.linearMove.length
+		this.currentLinearSpeed
+	}
+
+	def setCurrentLinearSpeed(speed : float) : void {
+		this.currentLinearSpeed = speed
+	}
+	
+	def setCurrentLinearSpeed : void {
+		if(this.linearMove.length > this.maxLinearSpeed)
+			this.currentLinearSpeed = this.maxLinearSpeed
+		else 
+			this.currentLinearSpeed = this.linearMove.length
 	}
 
 	override getCurrentLinearMotion : Vector2f {

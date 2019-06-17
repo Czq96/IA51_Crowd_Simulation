@@ -52,8 +52,8 @@ class AgentBody extends AbstractMobileObject implements Body {
 	 * @param frustum the field-of-view associated to the body.
 	 */
 	new (id : UUID, shape : Shape2f<?>, maxLinearSpeed : float, maxLinearAcceleration : float,
-			maxAngularSpeed : float, maxAngularAcceleration : float, frustum : Frustum) {
-		super(id, shape, maxLinearSpeed, maxLinearAcceleration, maxAngularSpeed, maxAngularAcceleration)
+			maxAngularSpeed : float, maxAngularAcceleration : float, frustum : Frustum, slowDownShape : Shape2f<?>) {
+		super(id, shape, maxLinearSpeed, maxLinearAcceleration, maxAngularSpeed, maxAngularAcceleration, slowDownShape)
 		assert frustum === null || id == frustum.owner
 		this.frustum = frustum
 		this.type = "BODY"

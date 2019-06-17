@@ -84,7 +84,9 @@ class SquareMap extends AbstractEnvironment implements WorldModelStateProvider {
 			0.5f, // max linear acceleration (m/s)/s
 			MathUtil.PI / 4f, // max angular speed r/s
 			MathUtil.PI / 10f, // max angular acceleration (r/s)/s
-			frustum)
+			frustum,
+			new Circle2f(0f, 0f, VISITOR_SIZE*3) // slow down shape
+			)
 		body.name = MessageFormat::format("Visitor #{0}", this.agentBodyNumber + 1)
 		var entre = this.entranceBodyList.get(
 			(Math.random() * entranceBodyList.size()).intValue() // 如果有多个如口，可以随机生成在不同入口
