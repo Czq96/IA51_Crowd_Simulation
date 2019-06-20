@@ -211,7 +211,7 @@ class Percept implements MobileObject, Serializable {
 		if(this.name.isNullOrEmpty) super.toString() else this.name
 	}
 	
-	override getSlowDownShape : Shape2f<?> {
+	override getSlowDownShape : Circle2f {
 		this.slowDownShape
 	}
 	

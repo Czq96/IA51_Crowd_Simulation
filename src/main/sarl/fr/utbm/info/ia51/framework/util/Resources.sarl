@@ -170,9 +170,9 @@ final class Resources {
      * @return the url of the resource or <code>null</code> if the resource was
      * not found in class paths.
      */
-    static def getResourceAsStream(path : String) : InputStream {
-    	return getResourceAsStream(null as ClassLoader, path)
-    }
+    //static def getResourceAsStream(path : String) : InputStream {
+    	//return getResourceAsStream(null as ClassLoader, path)
+    //}
     
    	/**
      * Replies the input stream of a resource.
@@ -346,11 +346,11 @@ final class Resources {
 	 * @return the url of the resource or <code>null</code> if the resource was
 	 * not found in class paths.
 	 */
-    static def getResource(path : String) : URL {
+    //static def getResource(path : String) : URL {
     	
-		return getResource(null as ClassLoader, path)
+		//return getResource(null as ClassLoader, path)
 				// TODO: null as ClassLoader 
-	}
+	//}
 	
 
 	/** Translate the given resource name according to the current JVM standard.

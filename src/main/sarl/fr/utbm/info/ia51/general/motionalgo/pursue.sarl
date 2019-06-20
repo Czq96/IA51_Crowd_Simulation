@@ -54,8 +54,8 @@ class DelegatePursueAlgorithm implements PursueAlgorithm {
 
 	override run(position : Point2f, linearSpeed : float, maxLinear : float, targetPosition : Point2f,
 		targetLinearMotion : Vector2f) : MotionAlgorithmOutput {
-		var seekTarget = targetPosition - targetLinearMotion
-		this.seek.run(position, linearSpeed, maxLinear, seekTarget)
+		//var seekTarget = targetPosition - targetLinearMotion
+		//this.seek.run(position, linearSpeed, maxLinear, seekTarget)
 	}
 
 }

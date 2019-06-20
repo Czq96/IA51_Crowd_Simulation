@@ -55,30 +55,49 @@ abstract class AbstractSeekAlgorithm implements SeekAlgorithm {
 	abstract def getDynamicType : DynamicType
 
 	override run(myBody : Percept, percepts : List<Percept>, destination : Point2f) : MotionAlgorithmOutput {
+		var PI=3.1415f
 		var output = new MotionAlgorithmOutput(this.dynamicType)
-
+		
 		var direction = destination - myBody.position
+		var normDirect = new Vector2f(0.0f,0.0f)
+		normDirect.normalize(direction)
+		normDirect = normDirect * 40
 		var collision = false
 		var myshape = myBody.slowDownShape
+		myshape= myshape.translate(normDirect)
+		//create a slow down area which will change by the collision of percept
+		
+		
+		//set the slowdown shape move 1 block with normalDirection
+		
+		
 		for(p : percepts)
 		{
 			if (myshape.intersects(p.shape)&&p.type=="BODY")
 			{
 				collision = true
-				break
+				
+				normDirect.negate()
+				myshape=myshape.translate(normDirect)
+				normDirect.negate()
+				normDirect.turn(PI/6)
+				// if collision exist, then set the shape turn 30 degree.
+				myshape = myshape.translate(normDirect)
+				
 			}
 		}
 		
 		if (collision) // TODO collision --> true
 		{ // 如果碰撞 旋转角度 direction     减速 direction.length
-			//direction = new Vector2f(direction.x * Math::cos(3.1415 / 6)-direction.y * Math::sin(3.1415 / 6),
-				//destination.y * Math::cos(3.1415 / 6) + direction.x * Math::sin(3.1415 / 6))
+		//now direction will be to myShape.center 
+			direction = myshape.center-myBody.position
+			//direction = direction *
 			direction.length = myBody.maxLinearSpeed/ 10//
 			output.linear = direction
 		}
 		else {
 			
-			direction.length = myBody.maxLinearSpeed * 2//
+			direction.length = myBody.maxLinearSpeed /2//
 			output.linear = direction
 		}
 		
